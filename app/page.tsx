@@ -11,6 +11,7 @@ import { TestimonialCarousel } from "@/components/testimonial-carousel"
 import { CountdownHeader } from "@/components/countdown-header"
 import { FloatingCTA } from "@/components/floating-cta"
 import { FAQSection } from "@/components/faq-section"
+import { AnimatedCounter } from "@/components/animated-counter"
 
 // Dados dos depoimentos (simplificados para apenas imagens)
 const testimonials = [
@@ -235,7 +236,10 @@ export default function Home() {
                     ))}
                   </div>
                   <div className="text-sm text-[#666]">
-                    <span className="font-medium">7.000</span> empresas já automatizaram seu comercial
+                    <span className="font-medium">
+                      <AnimatedCounter end={7000} duration={2500} />
+                    </span>{" "}
+                    empresas já automatizaram seu comercial
                   </div>
                 </motion.div>
               </div>
@@ -622,10 +626,11 @@ export default function Home() {
                         De <span className="line-through">R$ 997,00</span>
                       </div>
                       <div className="flex items-center justify-center gap-2">
-                        <span className="text-5xl md:text-6xl font-bold text-[#333]">R$ 97</span>
+                        <span className="text-5xl md:text-6xl font-bold text-[#333]">R$ 47</span>
                         <span className="text-xl text-[#666]">,00</span>
                       </div>
-                      <div className="text-[#00c875] font-medium mt-2">Economize R$ 900,00 (90% de desconto)</div>
+                      <div className="text-[#666] text-lg mt-1">ou 12x de R$ 4,83</div>
+                      <div className="text-[#00c875] font-medium mt-2">Economize R$ 950,00 (95% de desconto)</div>
                     </div>
 
                     <div className="grid gap-4 mb-8 w-full max-w-md">
@@ -724,7 +729,7 @@ export default function Home() {
                 transition={{ duration: 0.5 }}
                 className="flex flex-col items-center text-center"
               >
-                <div className="text-4xl font-bold text-[#9747FF] mb-2">87%</div>
+                <AnimatedCounter end={87} suffix="%" className="text-4xl font-bold text-[#9747FF] mb-2" />
                 <p className="text-[#666]">Aumento médio na taxa de conversão</p>
               </motion.div>
 
@@ -735,7 +740,7 @@ export default function Home() {
                 transition={{ duration: 0.5, delay: 0.1 }}
                 className="flex flex-col items-center text-center"
               >
-                <div className="text-4xl font-bold text-[#9747FF] mb-2">7.000</div>
+                <AnimatedCounter end={7000} className="text-4xl font-bold text-[#9747FF] mb-2" />
                 <p className="text-[#666]">Empresas utilizando o AutoCRM</p>
               </motion.div>
 
@@ -746,7 +751,7 @@ export default function Home() {
                 transition={{ duration: 0.5, delay: 0.2 }}
                 className="flex flex-col items-center text-center"
               >
-                <div className="text-4xl font-bold text-[#9747FF] mb-2">65%</div>
+                <AnimatedCounter end={65} suffix="%" className="text-4xl font-bold text-[#9747FF] mb-2" />
                 <p className="text-[#666]">Redução no tempo de fechamento</p>
               </motion.div>
 
@@ -757,7 +762,12 @@ export default function Home() {
                 transition={{ duration: 0.5, delay: 0.3 }}
                 className="flex flex-col items-center text-center"
               >
-                <div className="text-4xl font-bold text-[#9747FF] mb-2">4.9/5</div>
+                <AnimatedCounter
+                  end={4.9}
+                  suffix="/5"
+                  decimals={1}
+                  className="text-4xl font-bold text-[#9747FF] mb-2"
+                />
                 <p className="text-[#666]">Avaliação média dos clientes</p>
               </motion.div>
             </div>
