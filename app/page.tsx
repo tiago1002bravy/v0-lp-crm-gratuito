@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Check, ChevronRight, Star } from "lucide-react"
@@ -47,9 +47,17 @@ export default function Home() {
   const [isLoaded, setIsLoaded] = useState(false)
   const { isOpen, openPopup, closePopup, handleSubmit } = useConversionPopup()
   const currentYear = new Date().getFullYear()
+  const videoRef = useRef<HTMLVideoElement>(null)
 
   useEffect(() => {
     setIsLoaded(true)
+
+    // Garantir que o vídeo seja reproduzido quando estiver pronto
+    if (videoRef.current) {
+      videoRef.current.play().catch((error) => {
+        console.error("Erro ao reproduzir o vídeo:", error)
+      })
+    }
   }, [])
 
   return (
@@ -217,28 +225,18 @@ export default function Home() {
                 </div>
 
                 <div className="relative w-full max-w-[600px] aspect-[16/9] rounded-xl overflow-hidden z-10">
-                  {/* Template CRM image */}
-                  <Image
-                    src="/images/template-crm-new.png"
-                    alt="Template CRM"
-                    fill
-                    className="object-contain scale-110 origin-center"
-                  />
-
-                  {/* Play button overlay */}
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <motion.div
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.9 }}
-                      className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center cursor-pointer"
-                    >
-                      <div className="w-14 h-14 rounded-full bg-[#9747FF] flex items-center justify-center shadow-lg">
-                        <svg className="w-6 h-6 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
-                          <path d="M8 5v14l11-7z" />
-                        </svg>
-                      </div>
-                    </motion.div>
-                  </div>
+                  {/* Vídeo em loop */}
+                  <video
+                    ref={videoRef}
+                    className="w-full h-full object-cover rounded-xl"
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                  >
+                    <source src="/videos/autocrm-demo.mov" type="video/mp4" />
+                    Seu navegador não suporta vídeos.
+                  </video>
 
                   <div className="absolute bottom-4 right-4">
                     <motion.div
