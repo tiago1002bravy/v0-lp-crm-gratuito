@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react"
 import Image from "next/image"
-import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Check, ChevronRight, Star } from "lucide-react"
 import { motion } from "framer-motion"
@@ -57,53 +56,6 @@ export default function Home() {
       {/* Popup de conversão */}
       <ConversionPopup isOpen={isOpen} onClose={closePopup} onSubmit={handleSubmit} />
 
-      <header className="border-b border-[#f5f5f5] bg-white sticky top-0 z-50">
-        <div className="container mx-auto flex h-16 items-center justify-between px-4">
-          <div className="flex items-center gap-2">
-            <motion.div initial={{ rotate: -10 }} animate={{ rotate: 0 }} transition={{ duration: 0.5 }}>
-              <svg className="h-6 w-6 text-[#7b68ee]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"
-                />
-              </svg>
-            </motion.div>
-            <span className="text-xl font-bold">AutoCRM</span>
-          </div>
-          <nav className="hidden md:flex items-center gap-6">
-            <Link href="#" className="text-sm font-medium text-[#333] hover:text-[#7b68ee] transition-colors">
-              Recursos
-            </Link>
-            <Link href="#" className="text-sm font-medium text-[#333] hover:text-[#7b68ee] transition-colors">
-              Preços
-            </Link>
-            <Link href="#" className="text-sm font-medium text-[#333] hover:text-[#7b68ee] transition-colors">
-              Depoimentos
-            </Link>
-            <Link href="#" className="text-sm font-medium text-[#333] hover:text-[#7b68ee] transition-colors">
-              FAQ
-            </Link>
-          </nav>
-          <div className="flex items-center gap-4">
-            <Link
-              href="#"
-              className="text-sm font-medium text-[#333] hover:text-[#7b68ee] transition-colors hidden sm:block"
-            >
-              Login
-            </Link>
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Button
-                className="bg-[#7b68ee] hover:bg-[#6a5acd] text-white rounded-full text-sm font-medium px-4 py-2 h-auto"
-                onClick={openPopup}
-              >
-                Começar agora
-              </Button>
-            </motion.div>
-          </div>
-        </div>
-      </header>
       <main className="flex-1">
         <section className="py-20 md:py-28 overflow-hidden relative">
           {/* Background elements */}
@@ -121,10 +73,19 @@ export default function Home() {
                   transition={{ duration: 0.5, delay: 0.1 }}
                   className="inline-flex items-center rounded-full border border-[#f0f0f0] bg-white px-3 py-1 text-sm font-medium shadow-sm self-start"
                 >
-                  <span className="flex h-2 w-2 rounded-full bg-[#7b68ee] mr-2"></span>
-                  <span className="bg-gradient-to-r from-[#7b68ee] to-[#6a5acd] bg-clip-text text-transparent">
+                  <span className="flex h-2 w-2 rounded-full bg-[#9747FF] mr-2"></span>
+                  <span className="bg-gradient-to-r from-[#9747FF] to-[#8A3DF9] bg-clip-text text-transparent">
                     A estrutura que os maiores players do Brasil usam
                   </span>
+                </motion.div>
+
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: isLoaded ? 1 : 0, y: isLoaded ? 0 : 20 }}
+                  transition={{ duration: 0.5, delay: 0.2 }}
+                  className="mb-4"
+                >
+                  <span className="text-2xl font-bold">Bravy School</span>
                 </motion.div>
 
                 <motion.h1
@@ -136,7 +97,7 @@ export default function Home() {
                   <span className="bg-gradient-to-r from-[#333] to-[#555] bg-clip-text text-transparent">
                     CRM 100% automatizado com templates, automações,{" "}
                   </span>
-                  <span className="inline-block bg-gradient-to-r from-[#7b68ee] to-[#6a5acd] bg-clip-text text-transparent">
+                  <span className="inline-block bg-gradient-to-r from-[#9747FF] to-[#8A3DF9] bg-clip-text text-transparent">
                     IA
                   </span>
                   <span className="bg-gradient-to-r from-[#333] to-[#555] bg-clip-text text-transparent">
@@ -162,7 +123,7 @@ export default function Home() {
                   className="flex flex-col sm:flex-row gap-4 mt-4"
                 >
                   <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                    <Button className="bg-[#7b68ee] hover:bg-[#6a5acd] text-white rounded-full text-base font-medium px-6 py-3 h-auto group">
+                    <Button className="bg-[#9747FF] hover:bg-[#8A3DF9] text-white rounded-full text-base font-medium px-6 py-3 h-auto group">
                       Automatizar comercial
                       <ChevronRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                     </Button>
@@ -193,7 +154,7 @@ export default function Home() {
                         transition={{ duration: 0.5, delay: 0.6 + index * 0.1 }}
                         className="flex items-center gap-2"
                       >
-                        <div className="text-[#7b68ee] flex items-center justify-center rounded-full bg-[#f5f2ff] h-5 w-5">
+                        <div className="text-[#9747FF] flex items-center justify-center rounded-full bg-[#f5f2ff] h-5 w-5">
                           <Check className="h-3 w-3" />
                         </div>
                         <p className="text-sm text-[#666]">{item}</p>
@@ -209,12 +170,20 @@ export default function Home() {
                   className="flex gap-4 mt-8"
                 >
                   <div className="flex -space-x-2">
-                    {[1, 2, 3, 4].map((user) => (
-                      <div
-                        key={user}
-                        className="w-8 h-8 rounded-full border-2 border-white bg-[#f5f2ff] flex items-center justify-center overflow-hidden"
-                      >
-                        <span className="text-xs font-medium text-[#7b68ee]">{String.fromCharCode(64 + user)}</span>
+                    {[
+                      "/images/person1.jpeg",
+                      "/images/person2.jpeg",
+                      "/images/person3.jpeg",
+                      "/images/person4.jpeg",
+                    ].map((src, index) => (
+                      <div key={index} className="w-8 h-8 rounded-full border-2 border-white overflow-hidden relative">
+                        <Image
+                          src={src || "/placeholder.svg"}
+                          alt={`Usuário ${index + 1}`}
+                          fill
+                          className="object-cover"
+                          sizes="32px"
+                        />
                       </div>
                     ))}
                   </div>
@@ -254,7 +223,7 @@ export default function Home() {
                       whileTap={{ scale: 0.9 }}
                       className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center cursor-pointer"
                     >
-                      <div className="w-14 h-14 rounded-full bg-[#7b68ee] flex items-center justify-center shadow-lg">
+                      <div className="w-14 h-14 rounded-full bg-[#9747FF] flex items-center justify-center shadow-lg">
                         <svg className="w-6 h-6 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
                           <path d="M8 5v14l11-7z" />
                         </svg>
@@ -273,14 +242,7 @@ export default function Home() {
                       }}
                       className="h-8 w-8 rounded-full bg-white/30 backdrop-blur-sm flex items-center justify-center"
                     >
-                      <svg className="h-4 w-4 text-[#7b68ee]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"
-                        />
-                      </svg>
+                      <span className="text-xs font-bold text-white">BS</span>
                     </motion.div>
                   </div>
                 </div>
@@ -440,8 +402,8 @@ export default function Home() {
         <section className="py-20 bg-white">
           <div className="container mx-auto px-4">
             <div className="flex flex-col items-center text-center gap-4 mb-16">
-              <div className="inline-flex items-center rounded-full border border-[#f0f0f0] bg-[#f5f2ff] px-3 py-1 text-sm font-medium text-[#7b68ee] shadow-sm">
-                <span className="flex h-2 w-2 rounded-full bg-[#7b68ee] mr-2"></span>Bônus Exclusivos
+              <div className="inline-flex items-center rounded-full border border-[#f0f0f0] bg-[#f5f2ff] px-3 py-1 text-sm font-medium text-[#9747FF] shadow-sm">
+                <span className="flex h-2 w-2 rounded-full bg-[#9747FF] mr-2"></span>Bônus Exclusivos
               </div>
               <h2 className="text-3xl font-bold text-[#333] sm:text-4xl md:text-5xl">
                 Materiais prontos para você implementar
@@ -460,7 +422,7 @@ export default function Home() {
                 </div>
                 <div className="relative">
                   <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-[#f5f2ff]">
-                    <svg className="h-6 w-6 text-[#7b68ee]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg className="h-6 w-6 text-[#9747FF]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -484,7 +446,7 @@ export default function Home() {
                 </div>
                 <div className="relative">
                   <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-[#f5f2ff]">
-                    <svg className="h-6 w-6 text-[#7b68ee]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg className="h-6 w-6 text-[#9747FF]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -508,7 +470,7 @@ export default function Home() {
                 </div>
                 <div className="relative">
                   <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-[#f5f2ff]">
-                    <svg className="h-6 w-6 text-[#7b68ee]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg className="h-6 w-6 text-[#9747FF]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -532,7 +494,7 @@ export default function Home() {
                 </div>
                 <div className="relative">
                   <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-[#f5f2ff]">
-                    <svg className="h-6 w-6 text-[#7b68ee]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg className="h-6 w-6 text-[#9747FF]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -556,7 +518,7 @@ export default function Home() {
                 </div>
                 <div className="relative">
                   <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-[#f5f2ff]">
-                    <svg className="h-6 w-6 text-[#7b68ee]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg className="h-6 w-6 text-[#9747FF]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -580,7 +542,7 @@ export default function Home() {
                 </div>
                 <div className="relative">
                   <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-[#f5f2ff]">
-                    <svg className="h-6 w-6 text-[#7b68ee]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg className="h-6 w-6 text-[#9747FF]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -603,8 +565,8 @@ export default function Home() {
         <section className="py-20 bg-gradient-to-b from-[#f5f2ff] to-white">
           <div className="container mx-auto px-4">
             <div className="flex flex-col items-center text-center gap-4 mb-16">
-              <div className="inline-flex items-center rounded-full border border-[#f0f0f0] bg-white px-3 py-1 text-sm font-medium text-[#7b68ee] shadow-sm">
-                <span className="flex h-2 w-2 rounded-full bg-[#7b68ee] mr-2"></span>Prova Social
+              <div className="inline-flex items-center rounded-full border border-[#f0f0f0] bg-white px-3 py-1 text-sm font-medium text-[#9747FF] shadow-sm">
+                <span className="flex h-2 w-2 rounded-full bg-[#9747FF] mr-2"></span>Prova Social
               </div>
               <h2 className="text-3xl font-bold text-[#333] sm:text-4xl md:text-5xl">
                 Usado pelos maiores especialistas
@@ -627,7 +589,7 @@ export default function Home() {
                 transition={{ duration: 0.5 }}
                 className="flex flex-col items-center text-center"
               >
-                <div className="text-4xl font-bold text-[#7b68ee] mb-2">87%</div>
+                <div className="text-4xl font-bold text-[#9747FF] mb-2">87%</div>
                 <p className="text-[#666]">Aumento médio na taxa de conversão</p>
               </motion.div>
 
@@ -638,7 +600,7 @@ export default function Home() {
                 transition={{ duration: 0.5, delay: 0.1 }}
                 className="flex flex-col items-center text-center"
               >
-                <div className="text-4xl font-bold text-[#7b68ee] mb-2">2.500+</div>
+                <div className="text-4xl font-bold text-[#9747FF] mb-2">2.500+</div>
                 <p className="text-[#666]">Empresas utilizando o AutoCRM</p>
               </motion.div>
 
@@ -649,7 +611,7 @@ export default function Home() {
                 transition={{ duration: 0.5, delay: 0.2 }}
                 className="flex flex-col items-center text-center"
               >
-                <div className="text-4xl font-bold text-[#7b68ee] mb-2">65%</div>
+                <div className="text-4xl font-bold text-[#9747FF] mb-2">65%</div>
                 <p className="text-[#666]">Redução no tempo de fechamento</p>
               </motion.div>
 
@@ -660,7 +622,7 @@ export default function Home() {
                 transition={{ duration: 0.5, delay: 0.3 }}
                 className="flex flex-col items-center text-center"
               >
-                <div className="text-4xl font-bold text-[#7b68ee] mb-2">4.9/5</div>
+                <div className="text-4xl font-bold text-[#9747FF] mb-2">4.9/5</div>
                 <p className="text-[#666]">Avaliação média dos clientes</p>
               </motion.div>
             </div>
@@ -669,7 +631,7 @@ export default function Home() {
             <div className="mt-16 flex justify-center">
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                 <Button
-                  className="bg-[#7b68ee] hover:bg-[#6a5acd] text-white rounded-full py-6 px-8 text-lg font-medium h-auto"
+                  className="bg-[#9747FF] hover:bg-[#8A3DF9] text-white rounded-full py-6 px-8 text-lg font-medium h-auto"
                   onClick={openPopup}
                 >
                   Quero automatizar meu comercial agora
@@ -685,8 +647,8 @@ export default function Home() {
           <div className="container mx-auto px-4">
             <div className="max-w-3xl mx-auto">
               <div className="flex flex-col items-center text-center gap-4 mb-12">
-                <div className="inline-flex items-center rounded-full border border-[#f0f0f0] bg-[#f5f2ff] px-3 py-1 text-sm font-medium text-[#7b68ee] shadow-sm">
-                  <span className="flex h-2 w-2 rounded-full bg-[#7b68ee] mr-2"></span>Oferta Especial
+                <div className="inline-flex items-center rounded-full border border-[#f0f0f0] bg-[#f5f2ff] px-3 py-1 text-sm font-medium text-[#9747FF] shadow-sm">
+                  <span className="flex h-2 w-2 rounded-full bg-[#9747FF] mr-2"></span>Oferta Especial
                 </div>
                 <h2 className="text-3xl font-bold text-[#333] sm:text-4xl md:text-5xl">
                   Invista agora no seu sucesso comercial
@@ -739,7 +701,7 @@ export default function Home() {
 
                     <div className="flex flex-col gap-4 w-full max-w-md">
                       <Button
-                        className="bg-[#7b68ee] hover:bg-[#6a5acd] text-white rounded-full py-6 text-lg font-medium h-auto"
+                        className="bg-[#9747FF] hover:bg-[#8A3DF9] text-white rounded-full py-6 text-lg font-medium h-auto"
                         onClick={openPopup}
                       >
                         Quero automatizar meu comercial agora
@@ -778,37 +740,6 @@ export default function Home() {
           </div>
         </section>
       </main>
-      <footer className="border-t border-[#f0f0f0] bg-white py-6">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <div className="flex items-center gap-2">
-              <svg className="h-5 w-5 text-[#7b68ee]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"
-                />
-              </svg>
-              <span className="text-xl font-bold text-[#333]">AutoCRM</span>
-            </div>
-            <div className="flex gap-4">
-              <Link href="#" className="text-sm text-[#666] hover:text-[#7b68ee] transition-colors">
-                Termos
-              </Link>
-              <Link href="#" className="text-sm text-[#666] hover:text-[#7b68ee] transition-colors">
-                Privacidade
-              </Link>
-              <Link href="#" className="text-sm text-[#666] hover:text-[#7b68ee] transition-colors">
-                Contato
-              </Link>
-            </div>
-            <div className="text-sm text-[#666]">
-              © {new Date().getFullYear()} AutoCRM. Todos os direitos reservados.
-            </div>
-          </div>
-        </div>
-      </footer>
     </div>
   )
 }

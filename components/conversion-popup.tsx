@@ -8,6 +8,7 @@ import { X, CheckCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { getUtmParams } from "@/lib/utils"
+// import Image from "next/image"
 
 interface ConversionPopupProps {
   isOpen: boolean
@@ -284,13 +285,16 @@ export function ConversionPopup({ isOpen, onClose, onSubmit }: ConversionPopupPr
                     <>
                       {/* Header */}
                       <div className="mb-6 text-center">
-                        <div className="inline-flex items-center rounded-full border border-[#f0f0f0] bg-[#f5f2ff] px-3 py-1 text-sm font-medium text-[#7b68ee] shadow-sm mb-4">
-                          <span className="flex h-2 w-2 rounded-full bg-[#7b68ee] mr-2"></span>Oferta Exclusiva
+                        <div className="inline-flex items-center rounded-full border border-[#f0f0f0] bg-[#f5f2ff] px-3 py-1 text-sm font-medium text-[#9747FF] shadow-sm mb-4">
+                          <span className="flex h-2 w-2 rounded-full bg-[#9747FF] mr-2"></span>Oferta Exclusiva
                         </div>
+                        {/* <div className="flex justify-center mb-3">
+                          <Image src="/images/bravy-school-logo.svg" alt="Bravy School Logo" width={40} height={40} />
+                        </div> */}
                         <h3 className="text-2xl font-bold text-[#333] mb-2">
                           Garanta seu acesso ao{" "}
-                          <span className="bg-gradient-to-r from-[#7b68ee] to-[#6a5acd] inline-block text-transparent bg-clip-text">
-                            AutoCRM
+                          <span className="bg-gradient-to-r from-[#9747FF] to-[#8A3DF9] inline-block text-transparent bg-clip-text">
+                            Bravy School
                           </span>
                         </h3>
                         <p className="text-[#666]">
@@ -352,7 +356,7 @@ export function ConversionPopup({ isOpen, onClose, onSubmit }: ConversionPopupPr
                           type="submit"
                           className={`w-full rounded-full py-6 text-lg font-medium h-auto transition-colors duration-300 ${
                             formComplete
-                              ? "bg-[#7b68ee] hover:bg-[#6a5acd] text-white"
+                              ? "bg-[#9747FF] hover:bg-[#8A3DF9] text-white"
                               : "bg-gray-400 text-gray-100 cursor-not-allowed hover:bg-gray-400"
                           }`}
                           disabled={isSubmitting || !formComplete}
