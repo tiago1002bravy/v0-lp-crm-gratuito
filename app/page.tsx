@@ -128,17 +128,8 @@ export default function Home() {
                 >
                   <span className="flex h-2 w-2 rounded-full bg-[#9747FF] mr-2"></span>
                   <span className="bg-gradient-to-r from-[#9747FF] to-[#8A3DF9] bg-clip-text text-transparent">
-                    A estrutura que os maiores players do Brasil usam
+                    Lançamento com 90%OFF
                   </span>
-                </motion.div>
-
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: isLoaded ? 1 : 0, y: isLoaded ? 0 : 20 }}
-                  transition={{ duration: 0.5, delay: 0.2 }}
-                  className="mb-4"
-                >
-                  <span className="text-2xl font-bold">Bravy School</span>
                 </motion.div>
 
                 <motion.h1
