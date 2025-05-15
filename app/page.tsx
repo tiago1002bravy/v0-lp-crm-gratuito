@@ -8,6 +8,9 @@ import { motion } from "framer-motion"
 import { ConversionPopup } from "@/components/conversion-popup"
 import { useConversionPopup } from "@/hooks/use-conversion-popup"
 import { TestimonialCarousel } from "@/components/testimonial-carousel"
+import { CountdownHeader } from "@/components/countdown-header"
+import { FloatingCTA } from "@/components/floating-cta"
+import { FAQSection } from "@/components/faq-section"
 
 // Dados dos depoimentos (simplificados para apenas imagens)
 const testimonials = [
@@ -43,11 +46,39 @@ const testimonials = [
   },
 ]
 
+// Dados do FAQ
+const faqItems = [
+  {
+    question: "Preciso ter conhecimento técnico?",
+    answer:
+      "Não, o AutoCRM foi desenvolvido para ser intuitivo e fácil de usar. Fornecemos tutoriais detalhados e suporte para ajudar na implementação, mesmo se você não tiver experiência técnica. Nossos templates são prontos para usar e as automações são configuradas com poucos cliques.",
+  },
+  {
+    question: "Quanto tempo leva para implementar?",
+    answer:
+      "A implementação básica pode ser feita em apenas 1 dia. Você receberá acesso imediato aos templates e poderá começar a usar o sistema em poucas horas. Para uma implementação completa com todas as automações, o processo leva em média 3 a 5 dias, dependendo da complexidade do seu negócio.",
+  },
+  {
+    question: "Quanto vou gastar de ferramenta?",
+    answer:
+      "As ferramentas necessárias (ClickUp, Make.com e Google Sheets) possuem versões gratuitas que são suficientes para começar. Para negócios em crescimento, recomendamos os planos básicos que custam aproximadamente R$50/mês no total. Detalhamos todas as opções e custos nos materiais de treinamento para que você possa escolher o que melhor se adapta ao seu orçamento.",
+  },
+  {
+    question: "Dá pra usar no plano gratuito?",
+    answer:
+      "Sim! Desenvolvemos o sistema para funcionar com os planos gratuitos das ferramentas. Você pode começar sem nenhum investimento adicional além do curso. À medida que seu negócio cresce, você pode optar por atualizar para planos pagos para acessar recursos avançados, mas isso não é obrigatório para obter resultados significativos.",
+  },
+]
+
 export default function Home() {
   const [isLoaded, setIsLoaded] = useState(false)
   const { isOpen, openPopup, closePopup, handleSubmit } = useConversionPopup()
   const currentYear = new Date().getFullYear()
   const videoRef = useRef<HTMLVideoElement>(null)
+
+  // Criar data alvo para o contador (3 dias a partir de agora)
+  const targetDate = new Date()
+  targetDate.setDate(targetDate.getDate() + 3)
 
   useEffect(() => {
     setIsLoaded(true)
@@ -60,10 +91,23 @@ export default function Home() {
     }
   }, [])
 
+  const scrollToOffer = () => {
+    const ofertaSection = document.getElementById("oferta")
+    if (ofertaSection) {
+      ofertaSection.scrollIntoView({ behavior: "smooth" })
+    }
+  }
+
   return (
     <div className="flex flex-col min-h-screen bg-white">
+      {/* Barra de contador no topo */}
+      <CountdownHeader targetDate={targetDate} onButtonClick={scrollToOffer} />
+
       {/* Popup de conversão */}
       <ConversionPopup isOpen={isOpen} onClose={closePopup} onSubmit={handleSubmit} />
+
+      {/* Botão flutuante */}
+      <FloatingCTA onClick={scrollToOffer} />
 
       <main className="flex-1">
         <section className="py-20 md:py-28 overflow-hidden relative">
@@ -134,12 +178,7 @@ export default function Home() {
                   <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                     <Button
                       className="bg-[#9747FF] hover:bg-[#8A3DF9] text-white rounded-full text-base font-medium px-6 py-3 h-auto group"
-                      onClick={() => {
-                        const ofertaSection = document.getElementById("oferta")
-                        if (ofertaSection) {
-                          ofertaSection.scrollIntoView({ behavior: "smooth" })
-                        }
-                      }}
+                      onClick={scrollToOffer}
                     >
                       Automatizar comercial
                       <ChevronRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
@@ -737,15 +776,39 @@ export default function Home() {
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                 <Button
                   className="bg-[#9747FF] hover:bg-[#8A3DF9] text-white rounded-full py-6 px-8 text-lg font-medium h-auto"
-                  onClick={() => {
-                    const ofertaSection = document.getElementById("oferta")
-                    if (ofertaSection) {
-                      ofertaSection.scrollIntoView({ behavior: "smooth" })
-                    }
-                  }}
+                  onClick={scrollToOffer}
                 >
                   Quero automatizar meu comercial agora
                   <ChevronRight className="ml-2 h-5 w-5" />
+                </Button>
+              </motion.div>
+            </div>
+          </div>
+        </section>
+
+        {/* Seção de FAQ */}
+        <section className="py-16 bg-[#f5f2ff]">
+          <div className="container mx-auto px-4">
+            <div className="flex flex-col items-center text-center gap-4 mb-12">
+              <div className="inline-flex items-center rounded-full border border-[#f0f0f0] bg-white px-3 py-1 text-sm font-medium text-[#9747FF] shadow-sm">
+                <span className="flex h-2 w-2 rounded-full bg-[#9747FF] mr-2"></span>Dúvidas Frequentes
+              </div>
+              <h2 className="text-3xl font-bold text-[#333] sm:text-4xl">Perguntas Frequentes</h2>
+              <p className="text-lg text-[#666] max-w-[800px]">
+                Tire suas dúvidas sobre o AutoCRM e como ele pode transformar seu processo comercial
+              </p>
+            </div>
+
+            <FAQSection items={faqItems} />
+
+            <div className="mt-12 flex justify-center">
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Button
+                  className="bg-[#9747FF] hover:bg-[#8A3DF9] text-white rounded-full py-3 px-6 text-base font-medium h-auto"
+                  onClick={scrollToOffer}
+                >
+                  Automatizar comercial agora
+                  <ChevronRight className="ml-2 h-4 w-4" />
                 </Button>
               </motion.div>
             </div>
