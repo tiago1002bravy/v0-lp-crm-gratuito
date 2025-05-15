@@ -8,6 +8,41 @@ import { Check, ChevronRight, Star } from "lucide-react"
 import { motion } from "framer-motion"
 import { ConversionPopup } from "@/components/conversion-popup"
 import { useConversionPopup } from "@/hooks/use-conversion-popup"
+import { TestimonialCarousel } from "@/components/testimonial-carousel"
+
+// Dados dos depoimentos (simplificados para apenas imagens)
+const testimonials = [
+  {
+    id: 1,
+    name: "Pablo Marçal",
+    image: "/images/pablo-marcal.png",
+  },
+  {
+    id: 2,
+    name: "Cris Franklin",
+    image: "/images/cris-franklin.png",
+  },
+  {
+    id: 3,
+    name: "Rafa Brito",
+    image: "/images/rafa-brito.png",
+  },
+  {
+    id: 4,
+    name: "Marcello Safe",
+    image: "/images/marcello-safe.png",
+  },
+  {
+    id: 5,
+    name: "Igor Moraes",
+    image: "/images/igor-moraes.png",
+  },
+  {
+    id: 6,
+    name: "Cadu Neiva",
+    image: "/images/cadu-neiva.png",
+  },
+]
 
 export default function Home() {
   const [isLoaded, setIsLoaded] = useState(false)
@@ -206,7 +241,7 @@ export default function Home() {
                 <div className="relative w-full max-w-[600px] aspect-[16/9] rounded-xl overflow-hidden z-10">
                   {/* Template CRM image */}
                   <Image
-                    src="/images/template-crm.png"
+                    src="/images/template-crm-new.png"
                     alt="Template CRM"
                     fill
                     className="object-contain scale-110 origin-center"
@@ -309,82 +344,92 @@ export default function Home() {
               </p>
             </div>
 
-            {/* Pipeline de Vendas */}
-            <div className="grid md:grid-cols-2 gap-10 mb-20 items-center">
-              <div className="flex flex-col gap-4">
-                <h3 className="text-2xl font-bold text-[#333]">Pipeline de Vendas</h3>
-                <p className="text-[#666]">
-                  Tenha total gestão das etapas do processo comercial, entenda como está a qualificação, agendamento,
-                  FollowUp, ganhos e perdas.
-                </p>
-              </div>
-              <div className="rounded-xl overflow-hidden relative">
-                <div className="relative w-full aspect-[16/9]">
-                  <Image src="/images/pipeline-crm.png" alt="Pipeline de Vendas" fill className="object-contain" />
+            {/* Seções de recursos com layout padronizado */}
+            <div className="space-y-24">
+              {/* Pipeline de Vendas */}
+              <div className="grid md:grid-cols-2 gap-10 items-center">
+                <div className="flex flex-col gap-6">
+                  <h3 className="text-3xl font-bold text-[#333]">Pipeline de Vendas</h3>
+                  <p className="text-lg text-[#666] leading-relaxed">
+                    Tenha total gestão das etapas do processo comercial, entenda como está a qualificação, agendamento,
+                    FollowUp, ganhos e perdas.
+                  </p>
+                </div>
+                <div className="rounded-xl overflow-hidden relative shadow-lg">
+                  <div className="relative w-full aspect-[16/10]">
+                    <Image
+                      src="/images/template-gratuito-crm.svg"
+                      alt="Pipeline de Vendas"
+                      fill
+                      className="object-contain"
+                      priority
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
 
-            {/* Automações estratégicas */}
-            <div className="grid md:grid-cols-2 gap-10 mb-20 items-center md:flex-row-reverse">
-              <div className="flex flex-col gap-4 md:order-2">
-                <h3 className="text-2xl font-bold text-[#333]">Automações estratégicas</h3>
-                <ul className="space-y-3">
-                  <li className="flex items-start gap-2">
-                    <div className="text-[#00c875] flex items-center justify-center rounded-sm mt-1">
-                      <Check className="h-5 w-5" />
-                    </div>
-                    <p className="text-[#666]">Cadastro automático dos leads</p>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <div className="text-[#00c875] flex items-center justify-center rounded-sm mt-1">
-                      <Check className="h-5 w-5" />
-                    </div>
-                    <p className="text-[#666]">Mensagens de WhatsApp com GPT</p>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <div className="text-[#00c875] flex items-center justify-center rounded-sm mt-1">
-                      <Check className="h-5 w-5" />
-                    </div>
-                    <p className="text-[#666]">Agendamento de reuniões no Google Calendar</p>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <div className="text-[#00c875] flex items-center justify-center rounded-sm mt-1">
-                      <Check className="h-5 w-5" />
-                    </div>
-                    <p className="text-[#666]">Lembrete de Reuniões via WhatsApp</p>
-                  </li>
-                </ul>
-              </div>
-              <div className="rounded-xl overflow-hidden relative md:order-1">
-                <div className="relative w-full aspect-[16/9]">
-                  <Image
-                    src="/images/automacoes-crm.png"
-                    alt="Automações estratégicas"
-                    fill
-                    className="object-contain"
-                  />
+              {/* Automações estratégicas */}
+              <div className="grid md:grid-cols-2 gap-10 items-center">
+                <div className="order-2 md:order-1 rounded-xl overflow-hidden relative shadow-lg">
+                  <div className="relative w-full aspect-[16/10]">
+                    <Image
+                      src="/images/automacoes-crm.png"
+                      alt="Automações estratégicas"
+                      fill
+                      className="object-contain"
+                    />
+                  </div>
+                </div>
+                <div className="order-1 md:order-2 flex flex-col gap-6">
+                  <h3 className="text-3xl font-bold text-[#333]">Automações estratégicas</h3>
+                  <ul className="space-y-4">
+                    <li className="flex items-start gap-3">
+                      <div className="text-[#00c875] flex items-center justify-center rounded-sm mt-1">
+                        <Check className="h-6 w-6" />
+                      </div>
+                      <p className="text-lg text-[#666]">Cadastro automático dos leads</p>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <div className="text-[#00c875] flex items-center justify-center rounded-sm mt-1">
+                        <Check className="h-6 w-6" />
+                      </div>
+                      <p className="text-lg text-[#666]">Mensagens de WhatsApp com GPT</p>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <div className="text-[#00c875] flex items-center justify-center rounded-sm mt-1">
+                        <Check className="h-6 w-6" />
+                      </div>
+                      <p className="text-lg text-[#666]">Agendamento de reuniões no Google Calendar</p>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <div className="text-[#00c875] flex items-center justify-center rounded-sm mt-1">
+                        <Check className="h-6 w-6" />
+                      </div>
+                      <p className="text-lg text-[#666]">Lembrete de Reuniões via WhatsApp</p>
+                    </li>
+                  </ul>
                 </div>
               </div>
-            </div>
 
-            {/* Dashboard de resultados */}
-            <div className="grid md:grid-cols-2 gap-10 items-center">
-              <div className="flex flex-col gap-4">
-                <h3 className="text-2xl font-bold text-[#333]">Dashboard de resultados</h3>
-                <p className="text-[#666]">
-                  Acompanhe os principais indicadores/métricas do seu processo de vendas sem precisar de um conhecimento
-                  avançado em BI.
-                </p>
-              </div>
-              <div className="rounded-xl overflow-hidden relative">
-                <div className="relative w-full aspect-[16/9]">
-                  <Image
-                    src="/images/dashboard-laptop.png"
-                    alt="Dashboard de resultados"
-                    fill
-                    className="object-contain"
-                  />
+              {/* Dashboard de resultados */}
+              <div className="grid md:grid-cols-2 gap-10 items-center">
+                <div className="flex flex-col gap-6">
+                  <h3 className="text-3xl font-bold text-[#333]">Dashboard de resultados</h3>
+                  <p className="text-lg text-[#666] leading-relaxed">
+                    Acompanhe os principais indicadores/métricas do seu processo de vendas sem precisar de um
+                    conhecimento avançado em BI.
+                  </p>
+                </div>
+                <div className="rounded-xl overflow-hidden relative shadow-lg">
+                  <div className="relative w-full aspect-[16/10]">
+                    <Image
+                      src="/images/dashboard-comercial.svg"
+                      alt="Dashboard de resultados"
+                      fill
+                      className="object-contain"
+                      priority
+                    />
+                  </div>
                 </div>
               </div>
             </div>
@@ -551,12 +596,86 @@ export default function Home() {
                 </div>
               </div>
             </div>
+          </div>
+        </section>
 
-            <div className="mt-16 flex flex-col items-center">
-              <div className="bg-[#fafafa] rounded-xl p-6 mb-8 text-center max-w-xl">
-                <p className="text-sm text-[#666] mb-2">Valor total dos bônus</p>
-                <p className="text-3xl font-bold text-[#333] mb-1">R$ 882</p>
+        {/* Nova Seção de Prova Social com Carrossel apenas de imagens */}
+        <section className="py-20 bg-gradient-to-b from-[#f5f2ff] to-white">
+          <div className="container mx-auto px-4">
+            <div className="flex flex-col items-center text-center gap-4 mb-16">
+              <div className="inline-flex items-center rounded-full border border-[#f0f0f0] bg-white px-3 py-1 text-sm font-medium text-[#7b68ee] shadow-sm">
+                <span className="flex h-2 w-2 rounded-full bg-[#7b68ee] mr-2"></span>Prova Social
               </div>
+              <h2 className="text-3xl font-bold text-[#333] sm:text-4xl md:text-5xl">
+                Usado pelos maiores especialistas
+              </h2>
+              <p className="text-xl text-[#666] max-w-[800px]">
+                Veja quem já está utilizando o AutoCRM para transformar seu processo comercial
+              </p>
+            </div>
+
+            <div className="max-w-md mx-auto">
+              <TestimonialCarousel testimonials={testimonials} />
+            </div>
+
+            {/* Estatísticas */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-20">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5 }}
+                className="flex flex-col items-center text-center"
+              >
+                <div className="text-4xl font-bold text-[#7b68ee] mb-2">87%</div>
+                <p className="text-[#666]">Aumento médio na taxa de conversão</p>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+                className="flex flex-col items-center text-center"
+              >
+                <div className="text-4xl font-bold text-[#7b68ee] mb-2">2.500+</div>
+                <p className="text-[#666]">Empresas utilizando o AutoCRM</p>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="flex flex-col items-center text-center"
+              >
+                <div className="text-4xl font-bold text-[#7b68ee] mb-2">65%</div>
+                <p className="text-[#666]">Redução no tempo de fechamento</p>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+                className="flex flex-col items-center text-center"
+              >
+                <div className="text-4xl font-bold text-[#7b68ee] mb-2">4.9/5</div>
+                <p className="text-[#666]">Avaliação média dos clientes</p>
+              </motion.div>
+            </div>
+
+            {/* CTA */}
+            <div className="mt-16 flex justify-center">
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Button
+                  className="bg-[#7b68ee] hover:bg-[#6a5acd] text-white rounded-full py-6 px-8 text-lg font-medium h-auto"
+                  onClick={openPopup}
+                >
+                  Quero automatizar meu comercial agora
+                  <ChevronRight className="ml-2 h-5 w-5" />
+                </Button>
+              </motion.div>
             </div>
           </div>
         </section>
@@ -639,7 +758,7 @@ export default function Home() {
                           </svg>
                           <span>Compra segura</span>
                         </div>
-                        <div className="flex items-center gap-1">
+                        <div className="flex items-center justify-center gap-1">
                           <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path
                               strokeLinecap="round"
@@ -655,106 +774,6 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Seção de Prova Social */}
-        <section className="py-20 bg-[#111]">
-          <div className="container mx-auto px-4">
-            <div className="flex flex-col items-center text-center gap-4 mb-10">
-              <div className="inline-flex items-center rounded-full border border-[#333] bg-[#222] px-3 py-1 text-sm font-medium text-[#7b68ee] shadow-sm">
-                <span className="flex h-2 w-2 rounded-full bg-[#7b68ee] mr-2"></span>
-                <span className="text-white">Prova Social</span>
-              </div>
-              <h2 className="text-3xl font-bold text-white sm:text-4xl md:text-5xl">
-                O mesmo método que os grandes players usam
-              </h2>
-              <p className="text-xl text-gray-400 max-w-[800px]">
-                Conheça alguns dos especialistas que utilizam e recomendam nossa metodologia
-              </p>
-            </div>
-
-            {/* Grid de especialistas */}
-            <div className="flex flex-col gap-2">
-              {/* Linha superior - 2 especialistas principais */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                {/* Especialista 1 - Marcos Paulo (vídeo) */}
-                <div className="relative overflow-hidden aspect-[3/2] md:aspect-[16/9]">
-                  <div className="relative h-full">
-                    <Image
-                      src="/placeholder.svg?key=xcpf8"
-                      alt="Marcos Paulo"
-                      fill
-                      className="object-cover object-center"
-                    />
-                  </div>
-                  {/* Play button */}
-                  <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20">
-                    <div className="w-16 h-16 rounded-full bg-[#e67e22] flex items-center justify-center cursor-pointer">
-                      <svg className="w-6 h-6 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M8 5v14l11-7z" />
-                      </svg>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Especialista 2 - Pablo Marçal */}
-                <div className="relative overflow-hidden aspect-[3/2] md:aspect-[16/9]">
-                  <div className="relative h-full">
-                    <Image src="/images/pablo-marcal.png" alt="Pablo Marçal" fill className="object-contain" />
-                  </div>
-                </div>
-              </div>
-
-              {/* Linha inferior - 5 especialistas secundários */}
-              <div className="grid grid-cols-5 gap-2">
-                {/* Especialista 3 - Cris Franklin */}
-                <div className="relative overflow-hidden aspect-[4/5]">
-                  <div className="relative h-full">
-                    <Image src="/images/cris-franklin.png" alt="Cris Franklin" fill className="object-contain" />
-                  </div>
-                </div>
-
-                {/* Especialista 4 - Rafa Brito */}
-                <div className="relative overflow-hidden aspect-[4/5]">
-                  <div className="relative h-full">
-                    <Image src="/images/rafa-brito.png" alt="Rafa Brito" fill className="object-contain" />
-                  </div>
-                </div>
-
-                {/* Especialista 5 - Marcello Safe */}
-                <div className="relative overflow-hidden aspect-[4/5]">
-                  <div className="relative h-full">
-                    <Image src="/images/marcello-safe.png" alt="Marcello Safe" fill className="object-contain" />
-                  </div>
-                </div>
-
-                {/* Especialista 6 - Igor Moraes */}
-                <div className="relative overflow-hidden aspect-[4/5]">
-                  <div className="relative h-full">
-                    <Image src="/images/igor-moraes.png" alt="Igor Moraes" fill className="object-contain" />
-                  </div>
-                </div>
-
-                {/* Especialista 7 - Cadu Neiva */}
-                <div className="relative overflow-hidden aspect-[4/5]">
-                  <div className="relative h-full">
-                    <Image src="/images/cadu-neiva.png" alt="Cadu Neiva" fill className="object-contain" />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* CTA Final */}
-            <div className="mt-16 flex flex-col items-center">
-              <Button
-                className="bg-[#7b68ee] hover:bg-[#6a5acd] text-white rounded-full py-6 px-8 text-lg font-medium h-auto"
-                onClick={openPopup}
-              >
-                Quero automatizar meu comercial agora
-                <ChevronRight className="ml-2 h-5 w-5" />
-              </Button>
             </div>
           </div>
         </section>

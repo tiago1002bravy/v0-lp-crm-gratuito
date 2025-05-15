@@ -162,7 +162,6 @@ export function ConversionPopup({ isOpen, onClose, onSubmit }: ConversionPopupPr
                 utm_campaign: utmParams.utm_campaign,
                 utm_term: utmParams.utm_term,
                 utm_content: utmParams.utm_content,
-                ingresso: "comum",
               },
               from: "crm-gratuito-v1",
             },
