@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import { X, CheckCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { getUtmParams } from "@/lib/utils"
 
 interface ConversionPopupProps {
   isOpen: boolean
@@ -22,6 +23,21 @@ export function ConversionPopup({ isOpen, onClose, onSubmit }: ConversionPopupPr
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
   const [formComplete, setFormComplete] = useState(false)
+  const [utmParams, setUtmParams] = useState({
+    utm_source: "",
+    utm_medium: "",
+    utm_campaign: "",
+    utm_term: "",
+    utm_content: "",
+  })
+
+  // Capturar parâmetros UTM quando o componente é montado
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = getUtmParams()
+      setUtmParams(params)
+    }
+  }, [])
 
   // Reset form when modal opens
   useEffect(() => {
@@ -109,6 +125,85 @@ export function ConversionPopup({ isOpen, onClose, onSubmit }: ConversionPopupPr
     return Object.keys(newErrors).length === 0
   }
 
+  // Formatar o número de telefone para o formato internacional
+  const formatPhoneForWebhook = (phoneNumber: string) => {
+    const numbers = phoneNumber.replace(/\D/g, "")
+    if (numbers.length >= 10) {
+      return `+55${numbers}`
+    }
+    return `+55${numbers}`
+  }
+
+  const sendWebhook = async () => {
+    try {
+      const cleanPhone = phone.replace(/\D/g, "")
+      const formattedPhone = formatPhoneForWebhook(phone)
+
+      const webhookData = [
+        {
+          headers: {
+            host: "n8n.bravy.com.br",
+            "content-type": "application/json",
+            "user-agent": "AutoCRM-Webhook",
+          },
+          params: {},
+          query: {},
+          body: {
+            id: Math.floor(Math.random() * 100000),
+            from: "crm-gratuito-v1",
+            created: new Date().toISOString(),
+            content: {
+              name: name,
+              email: email,
+              whatsapp: `55${phone}`,
+              utms: {
+                utm_source: utmParams.utm_source,
+                utm_medium: utmParams.utm_medium,
+                utm_campaign: utmParams.utm_campaign,
+                utm_term: utmParams.utm_term,
+                utm_content: utmParams.utm_content,
+                ingresso: "comum",
+              },
+              from: "crm-gratuito-v1",
+            },
+            name: name,
+            telefone: `55${phone}`,
+            email: email,
+            utm: {
+              id: Math.floor(Math.random() * 100000),
+              utmSource: utmParams.utm_source,
+              utmMedium: utmParams.utm_medium,
+              utmCampaign: utmParams.utm_campaign,
+              utmTerm: utmParams.utm_term,
+              utmContent: utmParams.utm_content,
+            },
+            whatsapp: formattedPhone,
+            formatted_phone: formattedPhone,
+          },
+          webhookUrl: "https://n8n.bravy.com.br/webhook/crm",
+          executionMode: "production",
+        },
+      ]
+
+      const response = await fetch("https://n8n.bravy.com.br/webhook/crm", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(webhookData),
+      })
+
+      if (!response.ok) {
+        console.error("Webhook error:", await response.text())
+      }
+
+      return response.ok
+    } catch (error) {
+      console.error("Error sending webhook:", error)
+      return false
+    }
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
@@ -117,10 +212,13 @@ export function ConversionPopup({ isOpen, onClose, onSubmit }: ConversionPopupPr
     setIsSubmitting(true)
 
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000))
+      // Enviar dados para o webhook
+      await sendWebhook()
 
+      // Chamar o callback onSubmit
       onSubmit({ name, email, phone })
+
+      // Mostrar mensagem de sucesso
       setIsSuccess(true)
 
       // Mostrar mensagem de sucesso brevemente antes de redirecionar
