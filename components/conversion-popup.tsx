@@ -258,139 +258,141 @@ export function ConversionPopup({ isOpen, onClose, onSubmit }: ConversionPopupPr
             onClick={onClose}
           />
 
-          {/* Modal */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[95%] max-w-md z-[9999]"
-            style={{ margin: 0 }}
-          >
-            <div className="bg-white rounded-2xl shadow-2xl overflow-hidden max-h-[90vh] overflow-y-auto">
-              {/* Close button */}
-              <button
-                onClick={onClose}
-                className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 transition-colors z-10 p-1"
-                aria-label="Fechar"
-              >
-                <X size={24} />
-              </button>
+          {/* Wrapper div with flexbox for centering */}
+          <div className="fixed inset-0 flex items-center justify-center z-[9999] p-4">
+            {/* Modal */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              className="w-full max-w-md"
+            >
+              <div className="bg-white rounded-2xl shadow-2xl overflow-hidden max-h-[90vh] overflow-y-auto">
+                {/* Close button */}
+                <button
+                  onClick={onClose}
+                  className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 transition-colors z-10 p-1"
+                  aria-label="Fechar"
+                >
+                  <X size={24} />
+                </button>
 
-              {/* Content */}
-              <div className="p-6 md:p-8">
-                {!isSuccess ? (
-                  <>
-                    {/* Header */}
-                    <div className="mb-6 text-center">
-                      <div className="inline-flex items-center rounded-full border border-[#f0f0f0] bg-[#f5f2ff] px-3 py-1 text-sm font-medium text-[#7b68ee] shadow-sm mb-4">
-                        <span className="flex h-2 w-2 rounded-full bg-[#7b68ee] mr-2"></span>Oferta Exclusiva
+                {/* Content */}
+                <div className="p-6 md:p-8">
+                  {!isSuccess ? (
+                    <>
+                      {/* Header */}
+                      <div className="mb-6 text-center">
+                        <div className="inline-flex items-center rounded-full border border-[#f0f0f0] bg-[#f5f2ff] px-3 py-1 text-sm font-medium text-[#7b68ee] shadow-sm mb-4">
+                          <span className="flex h-2 w-2 rounded-full bg-[#7b68ee] mr-2"></span>Oferta Exclusiva
+                        </div>
+                        <h3 className="text-2xl font-bold text-[#333] mb-2">
+                          Garanta seu acesso ao{" "}
+                          <span className="bg-gradient-to-r from-[#7b68ee] to-[#6a5acd] inline-block text-transparent bg-clip-text">
+                            AutoCRM
+                          </span>
+                        </h3>
+                        <p className="text-[#666]">
+                          Preencha seus dados para receber acesso exclusivo e um desconto especial.
+                        </p>
                       </div>
-                      <h3 className="text-2xl font-bold text-[#333] mb-2">
-                        Garanta seu acesso ao{" "}
-                        <span className="bg-gradient-to-r from-[#7b68ee] to-[#6a5acd] inline-block text-transparent bg-clip-text">
-                          AutoCRM
-                        </span>
-                      </h3>
+
+                      {/* Form */}
+                      <form onSubmit={handleSubmit} className="space-y-4">
+                        <div>
+                          <label htmlFor="name" className="block text-sm font-medium text-[#333] mb-1">
+                            Nome completo
+                          </label>
+                          <Input
+                            id="name"
+                            type="text"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            placeholder="Digite seu nome completo"
+                            className={`w-full h-12 ${errors.name ? "border-red-500" : ""}`}
+                            disabled={isSubmitting}
+                          />
+                          {errors.name && <p className="mt-1 text-sm text-red-500">{errors.name}</p>}
+                        </div>
+
+                        <div>
+                          <label htmlFor="email" className="block text-sm font-medium text-[#333] mb-1">
+                            E-mail
+                          </label>
+                          <Input
+                            id="email"
+                            type="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            placeholder="Digite seu melhor e-mail"
+                            className={`w-full h-12 ${errors.email ? "border-red-500" : ""}`}
+                            disabled={isSubmitting}
+                          />
+                          {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email}</p>}
+                        </div>
+
+                        <div>
+                          <label htmlFor="phone" className="block text-sm font-medium text-[#333] mb-1">
+                            WhatsApp
+                          </label>
+                          <Input
+                            id="phone"
+                            type="tel"
+                            value={phone}
+                            onChange={(e) => setPhone(formatPhone(e.target.value))}
+                            placeholder="(00) 00000-0000"
+                            className={`w-full h-12 ${errors.phone ? "border-red-500" : ""}`}
+                            disabled={isSubmitting}
+                          />
+                          {errors.phone && <p className="mt-1 text-sm text-red-500">{errors.phone}</p>}
+                        </div>
+
+                        <Button
+                          type="submit"
+                          className={`w-full rounded-full py-6 text-lg font-medium h-auto transition-colors duration-300 ${
+                            formComplete
+                              ? "bg-[#7b68ee] hover:bg-[#6a5acd] text-white"
+                              : "bg-gray-400 text-gray-100 cursor-not-allowed hover:bg-gray-400"
+                          }`}
+                          disabled={isSubmitting || !formComplete}
+                        >
+                          {isSubmitting ? "Enviando..." : "Quero garantir meu acesso"}
+                        </Button>
+
+                        <p className="text-xs text-center text-[#666] mt-4">
+                          Seus dados estão seguros e não serão compartilhados com terceiros. Ao se cadastrar, você
+                          concorda com nossa política de privacidade.
+                        </p>
+                      </form>
+                    </>
+                  ) : (
+                    <div className="text-center py-8">
+                      <div className="flex justify-center mb-4">
+                        <CheckCircle size={64} className="text-green-500" />
+                      </div>
+                      <h3 className="text-2xl font-bold text-[#333] mb-2">Cadastro realizado!</h3>
                       <p className="text-[#666]">
-                        Preencha seus dados para receber acesso exclusivo e um desconto especial.
+                        Obrigado por se cadastrar! Enviamos um e-mail com as instruções de acesso.
                       </p>
                     </div>
-
-                    {/* Form */}
-                    <form onSubmit={handleSubmit} className="space-y-4">
-                      <div>
-                        <label htmlFor="name" className="block text-sm font-medium text-[#333] mb-1">
-                          Nome completo
-                        </label>
-                        <Input
-                          id="name"
-                          type="text"
-                          value={name}
-                          onChange={(e) => setName(e.target.value)}
-                          placeholder="Digite seu nome completo"
-                          className={`w-full ${errors.name ? "border-red-500" : ""}`}
-                          disabled={isSubmitting}
-                        />
-                        {errors.name && <p className="mt-1 text-sm text-red-500">{errors.name}</p>}
-                      </div>
-
-                      <div>
-                        <label htmlFor="email" className="block text-sm font-medium text-[#333] mb-1">
-                          E-mail
-                        </label>
-                        <Input
-                          id="email"
-                          type="email"
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
-                          placeholder="Digite seu melhor e-mail"
-                          className={`w-full ${errors.email ? "border-red-500" : ""}`}
-                          disabled={isSubmitting}
-                        />
-                        {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email}</p>}
-                      </div>
-
-                      <div>
-                        <label htmlFor="phone" className="block text-sm font-medium text-[#333] mb-1">
-                          WhatsApp
-                        </label>
-                        <Input
-                          id="phone"
-                          type="tel"
-                          value={phone}
-                          onChange={(e) => setPhone(formatPhone(e.target.value))}
-                          placeholder="(00) 00000-0000"
-                          className={`w-full ${errors.phone ? "border-red-500" : ""}`}
-                          disabled={isSubmitting}
-                        />
-                        {errors.phone && <p className="mt-1 text-sm text-red-500">{errors.phone}</p>}
-                      </div>
-
-                      <Button
-                        type="submit"
-                        className={`w-full rounded-full py-6 text-lg font-medium h-auto transition-colors duration-300 ${
-                          formComplete
-                            ? "bg-[#7b68ee] hover:bg-[#6a5acd] text-white"
-                            : "bg-gray-400 text-gray-100 cursor-not-allowed hover:bg-gray-400"
-                        }`}
-                        disabled={isSubmitting || !formComplete}
-                      >
-                        {isSubmitting ? "Enviando..." : "Quero garantir meu acesso"}
-                      </Button>
-
-                      <p className="text-xs text-center text-[#666] mt-4">
-                        Seus dados estão seguros e não serão compartilhados com terceiros. Ao se cadastrar, você
-                        concorda com nossa política de privacidade.
-                      </p>
-                    </form>
-                  </>
-                ) : (
-                  <div className="text-center py-8">
-                    <div className="flex justify-center mb-4">
-                      <CheckCircle size={64} className="text-green-500" />
-                    </div>
-                    <h3 className="text-2xl font-bold text-[#333] mb-2">Cadastro realizado!</h3>
-                    <p className="text-[#666]">
-                      Obrigado por se cadastrar! Enviamos um e-mail com as instruções de acesso.
-                    </p>
-                  </div>
-                )}
-              </div>
-
-              {/* Footer */}
-              <div className="bg-[#f5f5f5] p-4 flex items-center justify-center gap-2">
-                <div className="flex">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <svg key={star} className="h-4 w-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-.181h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                    </svg>
-                  ))}
+                  )}
                 </div>
-                <span className="text-sm text-[#666]">4.9/5 (2.5k+ avaliações)</span>
+
+                {/* Footer */}
+                <div className="bg-[#f5f5f5] p-4 flex items-center justify-center gap-2">
+                  <div className="flex">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <svg key={star} className="h-4 w-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </svg>
+                    ))}
+                  </div>
+                  <span className="text-sm text-[#666]">4.9/5 (2.5k+ avaliações)</span>
+                </div>
               </div>
-            </div>
-          </motion.div>
+            </motion.div>
+          </div>
         </>
       )}
     </AnimatePresence>
