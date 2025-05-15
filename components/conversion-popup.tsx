@@ -264,14 +264,13 @@ export function ConversionPopup({ isOpen, onClose, onSubmit }: ConversionPopupPr
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
             transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-md z-[9999]"
-            style={{ margin: "0 auto" }}
+            className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[95%] max-w-md z-[9999] mx-auto"
           >
             <div className="bg-white rounded-2xl shadow-2xl overflow-hidden">
               {/* Close button */}
               <button
                 onClick={onClose}
-                className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 transition-colors"
+                className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 transition-colors z-10"
                 aria-label="Fechar"
               >
                 <X size={24} />
