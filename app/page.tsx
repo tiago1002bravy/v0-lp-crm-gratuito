@@ -235,7 +235,7 @@ export default function Home() {
                     ))}
                   </div>
                   <div className="text-sm text-[#666]">
-                    <span className="font-medium">+2.500</span> empresas já automatizaram seu comercial
+                    <span className="font-medium">7.000</span> empresas já automatizaram seu comercial
                   </div>
                 </motion.div>
               </div>
@@ -735,7 +735,7 @@ export default function Home() {
                 transition={{ duration: 0.5, delay: 0.1 }}
                 className="flex flex-col items-center text-center"
               >
-                <div className="text-4xl font-bold text-[#9747FF] mb-2">2.500+</div>
+                <div className="text-4xl font-bold text-[#9747FF] mb-2">7.000</div>
                 <p className="text-[#666]">Empresas utilizando o AutoCRM</p>
               </motion.div>
 
