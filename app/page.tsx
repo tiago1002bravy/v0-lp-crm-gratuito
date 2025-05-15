@@ -6,9 +6,12 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Check, ChevronRight, Star } from "lucide-react"
 import { motion } from "framer-motion"
+import { ConversionPopup } from "@/components/conversion-popup"
+import { useConversionPopup } from "@/hooks/use-conversion-popup"
 
 export default function Home() {
   const [isLoaded, setIsLoaded] = useState(false)
+  const { isOpen, openPopup, closePopup, handleSubmit } = useConversionPopup()
 
   useEffect(() => {
     setIsLoaded(true)
@@ -16,6 +19,9 @@ export default function Home() {
 
   return (
     <div className="flex flex-col min-h-screen bg-white">
+      {/* Popup de conversão */}
+      <ConversionPopup isOpen={isOpen} onClose={closePopup} onSubmit={handleSubmit} />
+
       <header className="border-b border-[#f5f5f5] bg-white sticky top-0 z-50">
         <div className="container mx-auto flex h-16 items-center justify-between px-4">
           <div className="flex items-center gap-2">
@@ -53,7 +59,10 @@ export default function Home() {
               Login
             </Link>
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Button className="bg-[#7b68ee] hover:bg-[#6a5acd] text-white rounded-full text-sm font-medium px-4 py-2 h-auto">
+              <Button
+                className="bg-[#7b68ee] hover:bg-[#6a5acd] text-white rounded-full text-sm font-medium px-4 py-2 h-auto"
+                onClick={openPopup}
+              >
                 Começar agora
               </Button>
             </motion.div>
@@ -610,7 +619,10 @@ export default function Home() {
                     </div>
 
                     <div className="flex flex-col gap-4 w-full max-w-md">
-                      <Button className="bg-[#7b68ee] hover:bg-[#6a5acd] text-white rounded-full py-6 text-lg font-medium h-auto">
+                      <Button
+                        className="bg-[#7b68ee] hover:bg-[#6a5acd] text-white rounded-full py-6 text-lg font-medium h-auto"
+                        onClick={openPopup}
+                      >
                         Quero automatizar meu comercial agora
                         <ChevronRight className="ml-2 h-5 w-5" />
                       </Button>
@@ -736,7 +748,10 @@ export default function Home() {
 
             {/* CTA Final */}
             <div className="mt-16 flex flex-col items-center">
-              <Button className="bg-[#7b68ee] hover:bg-[#6a5acd] text-white rounded-full py-6 px-8 text-lg font-medium h-auto">
+              <Button
+                className="bg-[#7b68ee] hover:bg-[#6a5acd] text-white rounded-full py-6 px-8 text-lg font-medium h-auto"
+                onClick={openPopup}
+              >
                 Quero automatizar meu comercial agora
                 <ChevronRight className="ml-2 h-5 w-5" />
               </Button>
