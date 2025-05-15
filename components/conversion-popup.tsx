@@ -268,12 +268,13 @@ export function ConversionPopup({ isOpen, onClose, onSubmit }: ConversionPopupPr
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
               transition={{ type: "spring", damping: 25, stiffness: 300 }}
               className="w-full max-w-md"
+              onClick={(e) => e.stopPropagation()}
             >
               <div className="bg-white rounded-2xl shadow-2xl overflow-hidden max-h-[90vh] overflow-y-auto">
                 {/* Close button */}
                 <button
                   onClick={onClose}
-                  className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 transition-colors z-10 p-1"
+                  className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 transition-colors z-10 p-1 bg-white/80 rounded-full shadow-sm"
                   aria-label="Fechar"
                 >
                   <X size={24} />
@@ -288,18 +289,12 @@ export function ConversionPopup({ isOpen, onClose, onSubmit }: ConversionPopupPr
                         <div className="inline-flex items-center rounded-full border border-[#f0f0f0] bg-[#f5f2ff] px-3 py-1 text-sm font-medium text-[#9747FF] shadow-sm mb-4">
                           <span className="flex h-2 w-2 rounded-full bg-[#9747FF] mr-2"></span>Oferta Exclusiva
                         </div>
-                        {/* <div className="flex justify-center mb-3">
-                          <Image src="/images/bravy-school-logo.svg" alt="Bravy School Logo" width={40} height={40} />
-                        </div> */}
                         <h3 className="text-2xl font-bold text-[#333] mb-2">
-                          Garanta seu acesso ao{" "}
+                          Últimos dias para garantir seu template com{" "}
                           <span className="bg-gradient-to-r from-[#9747FF] to-[#8A3DF9] inline-block text-transparent bg-clip-text">
-                            Bravy School
+                            90% de desconto
                           </span>
                         </h3>
-                        <p className="text-[#666]">
-                          Preencha seus dados para receber acesso exclusivo e um desconto especial.
-                        </p>
                       </div>
 
                       {/* Form */}
@@ -361,7 +356,7 @@ export function ConversionPopup({ isOpen, onClose, onSubmit }: ConversionPopupPr
                           }`}
                           disabled={isSubmitting || !formComplete}
                         >
-                          {isSubmitting ? "Enviando..." : "Quero garantir meu acesso"}
+                          {isSubmitting ? "Enviando..." : "QUERO DOBRAR MINHA CONVERSÃO"}
                         </Button>
 
                         <p className="text-xs text-center text-[#666] mt-4">
@@ -392,7 +387,7 @@ export function ConversionPopup({ isOpen, onClose, onSubmit }: ConversionPopupPr
                       </svg>
                     ))}
                   </div>
-                  <span className="text-sm text-[#666]">4.9/5 (2.5k+ avaliações)</span>
+                  <span className="text-sm text-[#666]">4.9/5 (7k+ avaliações)</span>
                 </div>
               </div>
             </motion.div>

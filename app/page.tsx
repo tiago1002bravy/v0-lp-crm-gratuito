@@ -46,6 +46,7 @@ const testimonials = [
 export default function Home() {
   const [isLoaded, setIsLoaded] = useState(false)
   const { isOpen, openPopup, closePopup, handleSubmit } = useConversionPopup()
+  const currentYear = new Date().getFullYear()
 
   useEffect(() => {
     setIsLoaded(true)
@@ -123,7 +124,15 @@ export default function Home() {
                   className="flex flex-col sm:flex-row gap-4 mt-4"
                 >
                   <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                    <Button className="bg-[#9747FF] hover:bg-[#8A3DF9] text-white rounded-full text-base font-medium px-6 py-3 h-auto group">
+                    <Button
+                      className="bg-[#9747FF] hover:bg-[#8A3DF9] text-white rounded-full text-base font-medium px-6 py-3 h-auto group"
+                      onClick={() => {
+                        const ofertaSection = document.getElementById("oferta")
+                        if (ofertaSection) {
+                          ofertaSection.scrollIntoView({ behavior: "smooth" })
+                        }
+                      }}
+                    >
                       Automatizar comercial
                       <ChevronRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                     </Button>
@@ -135,7 +144,7 @@ export default function Home() {
                         <Star key={star} className="h-4 w-4 fill-[#ffcc00] text-[#ffcc00]" />
                       ))}
                     </div>
-                    <span>4.9/5 (2.5k+ avaliações)</span>
+                    <span>4.9/5 (7k+ avaliações)</span>
                   </div>
                 </motion.div>
 
@@ -561,89 +570,8 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Nova Seção de Prova Social com Carrossel apenas de imagens */}
-        <section className="py-20 bg-gradient-to-b from-[#f5f2ff] to-white">
-          <div className="container mx-auto px-4">
-            <div className="flex flex-col items-center text-center gap-4 mb-16">
-              <div className="inline-flex items-center rounded-full border border-[#f0f0f0] bg-white px-3 py-1 text-sm font-medium text-[#9747FF] shadow-sm">
-                <span className="flex h-2 w-2 rounded-full bg-[#9747FF] mr-2"></span>Prova Social
-              </div>
-              <h2 className="text-3xl font-bold text-[#333] sm:text-4xl md:text-5xl">
-                Usado pelos maiores especialistas
-              </h2>
-              <p className="text-xl text-[#666] max-w-[800px]">
-                Veja quem já está utilizando o AutoCRM para transformar seu processo comercial
-              </p>
-            </div>
-
-            <div className="max-w-md mx-auto">
-              <TestimonialCarousel testimonials={testimonials} />
-            </div>
-
-            {/* Estatísticas */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-20">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5 }}
-                className="flex flex-col items-center text-center"
-              >
-                <div className="text-4xl font-bold text-[#9747FF] mb-2">87%</div>
-                <p className="text-[#666]">Aumento médio na taxa de conversão</p>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.1 }}
-                className="flex flex-col items-center text-center"
-              >
-                <div className="text-4xl font-bold text-[#9747FF] mb-2">2.500+</div>
-                <p className="text-[#666]">Empresas utilizando o AutoCRM</p>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-                className="flex flex-col items-center text-center"
-              >
-                <div className="text-4xl font-bold text-[#9747FF] mb-2">65%</div>
-                <p className="text-[#666]">Redução no tempo de fechamento</p>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.3 }}
-                className="flex flex-col items-center text-center"
-              >
-                <div className="text-4xl font-bold text-[#9747FF] mb-2">4.9/5</div>
-                <p className="text-[#666]">Avaliação média dos clientes</p>
-              </motion.div>
-            </div>
-
-            {/* CTA */}
-            <div className="mt-16 flex justify-center">
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Button
-                  className="bg-[#9747FF] hover:bg-[#8A3DF9] text-white rounded-full py-6 px-8 text-lg font-medium h-auto"
-                  onClick={openPopup}
-                >
-                  Quero automatizar meu comercial agora
-                  <ChevronRight className="ml-2 h-5 w-5" />
-                </Button>
-              </motion.div>
-            </div>
-          </div>
-        </section>
-
         {/* Seção de Preço */}
-        <section className="py-20 bg-[#fafafa]">
+        <section id="oferta" className="py-20 bg-[#fafafa]">
           <div className="container mx-auto px-4">
             <div className="max-w-3xl mx-auto">
               <div className="flex flex-col items-center text-center gap-4 mb-12">
@@ -739,7 +667,112 @@ export default function Home() {
             </div>
           </div>
         </section>
+
+        {/* Nova Seção de Prova Social com Carrossel apenas de imagens - MOVIDA PARA O FINAL */}
+        <section className="py-20 bg-gradient-to-b from-white to-[#f5f2ff]">
+          <div className="container mx-auto px-4">
+            <div className="flex flex-col items-center text-center gap-4 mb-16">
+              <div className="inline-flex items-center rounded-full border border-[#f0f0f0] bg-white px-3 py-1 text-sm font-medium text-[#9747FF] shadow-sm">
+                <span className="flex h-2 w-2 rounded-full bg-[#9747FF] mr-2"></span>Prova Social
+              </div>
+              <h2 className="text-3xl font-bold text-[#333] sm:text-4xl md:text-5xl">
+                Usado pelos maiores especialistas
+              </h2>
+              <p className="text-xl text-[#666] max-w-[800px]">
+                Veja quem já está utilizando o AutoCRM para transformar seu processo comercial
+              </p>
+            </div>
+
+            <div className="max-w-md mx-auto">
+              <TestimonialCarousel testimonials={testimonials} />
+            </div>
+
+            {/* Estatísticas */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-20">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5 }}
+                className="flex flex-col items-center text-center"
+              >
+                <div className="text-4xl font-bold text-[#9747FF] mb-2">87%</div>
+                <p className="text-[#666]">Aumento médio na taxa de conversão</p>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+                className="flex flex-col items-center text-center"
+              >
+                <div className="text-4xl font-bold text-[#9747FF] mb-2">2.500+</div>
+                <p className="text-[#666]">Empresas utilizando o AutoCRM</p>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="flex flex-col items-center text-center"
+              >
+                <div className="text-4xl font-bold text-[#9747FF] mb-2">65%</div>
+                <p className="text-[#666]">Redução no tempo de fechamento</p>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+                className="flex flex-col items-center text-center"
+              >
+                <div className="text-4xl font-bold text-[#9747FF] mb-2">4.9/5</div>
+                <p className="text-[#666]">Avaliação média dos clientes</p>
+              </motion.div>
+            </div>
+
+            {/* CTA */}
+            <div className="mt-16 flex justify-center">
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Button
+                  className="bg-[#9747FF] hover:bg-[#8A3DF9] text-white rounded-full py-6 px-8 text-lg font-medium h-auto"
+                  onClick={() => {
+                    const ofertaSection = document.getElementById("oferta")
+                    if (ofertaSection) {
+                      ofertaSection.scrollIntoView({ behavior: "smooth" })
+                    }
+                  }}
+                >
+                  Quero automatizar meu comercial agora
+                  <ChevronRight className="ml-2 h-5 w-5" />
+                </Button>
+              </motion.div>
+            </div>
+          </div>
+        </section>
       </main>
+
+      {/* Rodapé */}
+      <footer className="py-8 bg-[#f5f2ff] border-t border-[#e5e5e5]">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col md:flex-row justify-between items-center">
+            <div className="mb-4 md:mb-0">
+              <p className="text-[#666] text-sm">© {currentYear} Bravy School. Todos os direitos reservados.</p>
+            </div>
+            <div className="flex items-center gap-6">
+              <a href="#" className="text-[#666] hover:text-[#9747FF] text-sm transition-colors">
+                Termos de Uso
+              </a>
+              <a href="#" className="text-[#666] hover:text-[#9747FF] text-sm transition-colors">
+                Política de Privacidade
+              </a>
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
   )
 }
