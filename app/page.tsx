@@ -801,7 +801,7 @@ export default function Home() {
               </div>
               <h2 className="text-3xl font-bold text-[#333] sm:text-4xl">Perguntas Frequentes</h2>
               <p className="text-lg text-[#666] max-w-[800px]">
-                Tire suas dúvidas sobre o AutoCRM e como ele pode transformar seu processo comercial
+                Tire suas dúvidas sobre como podemos transformar seu processo comercial
               </p>
             </div>
 
