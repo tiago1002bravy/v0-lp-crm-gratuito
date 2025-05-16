@@ -52,22 +52,27 @@ const faqItems = [
   {
     question: "Preciso ter conhecimento técnico?",
     answer:
-      "Não, o AutoCRM foi desenvolvido para ser intuitivo e fácil de usar. Fornecemos tutoriais detalhados e suporte para ajudar na implementação, mesmo se você não tiver experiência técnica. Nossos templates são prontos para usar e as automações são configuradas com poucos cliques.",
+      "Não, a estrutura tem aulas explicativas de como usar.",
   },
   {
     question: "Quanto tempo leva para implementar?",
     answer:
-      "A implementação básica pode ser feita em apenas 1 dia. Você receberá acesso imediato aos templates e poderá começar a usar o sistema em poucas horas. Para uma implementação completa com todas as automações, o processo leva em média 3 a 5 dias, dependendo da complexidade do seu negócio.",
+      "Se você não tiver nenhum conhecimento, em até 7 dias você consegue deixar tudo rodando. Se você já entender de ClickUp e make, você terá uma curva bem menor.",
   },
   {
     question: "Quanto vou gastar de ferramenta?",
     answer:
-      "As ferramentas necessárias (ClickUp, Make.com e Google Sheets) possuem versões gratuitas que são suficientes para começar. Para negócios em crescimento, recomendamos os planos básicos que custam aproximadamente R$50/mês no total. Detalhamos todas as opções e custos nos materiais de treinamento para que você possa escolher o que melhor se adapta ao seu orçamento.",
+      "O make você poderá usar no plano gratuito, já o ClickUp terá um custo de U$19,00 e vamos dar cupons com 30 dias gratuitos nas demais ferramentas.",
   },
   {
     question: "Dá pra usar no plano gratuito?",
     answer:
-      "Sim! Desenvolvemos o sistema para funcionar com os planos gratuitos das ferramentas. Você pode começar sem nenhum investimento adicional além do curso. À medida que seu negócio cresce, você pode optar por atualizar para planos pagos para acessar recursos avançados, mas isso não é obrigatório para obter resultados significativos.",
+      "O make você poderá usar no plano gratuito, já o ClickUp terá um custo de U$19,00 e vamos dar cupons com 30 dias gratuitos nas demais ferramentas.",
+  },
+  {
+    question: "O produto tem garantia?",
+    answer:
+      "Sim, oferecemos garantia de 7 dias. Se você não ficar satisfeito com o produto por qualquer motivo, devolvemos 100% do seu dinheiro. Sem perguntas. Queremos que você tenha total confiança na sua compra.",
   },
 ]
 
@@ -614,7 +619,7 @@ export default function Home() {
                   Invista agora no seu sucesso comercial
                 </h2>
                 <p className="text-xl text-[#666] max-w-[800px]">
-                  Acesso completo ao sistema, templates, automações e todos os bônus
+                  Acesso completo a estrutura com processos, automações, dashboards e todos os bônus
                 </p>
               </div>
 
@@ -706,7 +711,7 @@ export default function Home() {
           <div className="container mx-auto px-4">
             <div className="flex flex-col items-center text-center gap-4 mb-16">
               <div className="inline-flex items-center rounded-full border border-[#f0f0f0] bg-white px-3 py-1 text-sm font-medium text-[#9747FF] shadow-sm">
-                <span className="flex h-2 w-2 rounded-full bg-[#9747FF] mr-2"></span>Prova Social
+                <span className="flex h-2 w-2 rounded-full bg-[#9747FF] mr-2"></span>Usuários
               </div>
               <h2 className="text-3xl font-bold text-[#333] sm:text-4xl md:text-5xl">
                 Usado pelos maiores especialistas
