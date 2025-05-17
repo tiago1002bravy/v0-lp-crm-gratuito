@@ -14,35 +14,39 @@ interface FAQSectionProps {
 }
 
 export function FAQSection({ items }: FAQSectionProps) {
-  const [expandedIndex, setExpandedIndex] = useState<number | null>(null)
+  const [openIndex, setOpenIndex] = useState<number | null>(null)
 
   const toggleItem = (index: number) => {
-    setExpandedIndex(expandedIndex === index ? null : index)
+    setOpenIndex(openIndex === index ? null : index)
   }
 
   return (
-    <div className="w-full max-w-3xl mx-auto">
+    <div className="max-w-3xl mx-auto">
       <div className="space-y-4">
         {items.map((item, index) => (
-          <div key={index} className="border border-[#f0f0f0] rounded-lg overflow-hidden bg-white shadow-sm">
+          <div key={index} className="border border-[#e5e5e5] rounded-lg overflow-hidden bg-white">
             <button
               onClick={() => toggleItem(index)}
-              className="flex items-center justify-between w-full p-4 text-left focus:outline-none"
+              className="flex justify-between items-center w-full p-4 text-left focus:outline-none"
+              aria-expanded={openIndex === index}
             >
-              <span className="text-lg font-medium text-[#333]">{item.question}</span>
-              <motion.div animate={{ rotate: expandedIndex === index ? 180 : 0 }} transition={{ duration: 0.3 }}>
-                <ChevronDown className="h-5 w-5 text-[#9747FF]" />
-              </motion.div>
+              <span className="font-medium text-[#333]">{item.question}</span>
+              <ChevronDown
+                className={`h-5 w-5 text-[#9747FF] transition-transform ${
+                  openIndex === index ? "transform rotate-180" : ""
+                }`}
+              />
             </button>
+
             <AnimatePresence>
-              {expandedIndex === index && (
+              {openIndex === index && (
                 <motion.div
                   initial={{ height: 0, opacity: 0 }}
                   animate={{ height: "auto", opacity: 1 }}
                   exit={{ height: 0, opacity: 0 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <div className="p-4 pt-0 border-t border-[#f0f0f0] text-[#666]">{item.answer}</div>
+                  <div className="p-4 pt-0 text-[#666] border-t border-[#e5e5e5]">{item.answer}</div>
                 </motion.div>
               )}
             </AnimatePresence>

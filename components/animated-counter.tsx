@@ -1,10 +1,10 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
-import { useInView } from "framer-motion"
 
 interface AnimatedCounterProps {
   end: number
+  start?: number
   duration?: number
   decimals?: number
   suffix?: string
@@ -13,48 +13,53 @@ interface AnimatedCounterProps {
 
 export function AnimatedCounter({
   end,
+  start = 0,
   duration = 2000,
   decimals = 0,
   suffix = "",
   className = "",
 }: AnimatedCounterProps) {
-  const [count, setCount] = useState(0)
-  const ref = useRef<HTMLDivElement>(null)
-  const isInView = useInView(ref, { once: true, amount: 0.5 })
-  const [hasAnimated, setHasAnimated] = useState(false)
+  const [count, setCount] = useState(start)
+  const countRef = useRef(start)
+  const startTimeRef = useRef<number | null>(null)
+  const rafRef = useRef<number | null>(null)
 
   useEffect(() => {
-    if (!isInView || hasAnimated) return
+    // Função para animar o contador
+    const animate = (timestamp: number) => {
+      if (!startTimeRef.current) {
+        startTimeRef.current = timestamp
+      }
 
-    let startTimestamp: number | null = null
-    const step = (timestamp: number) => {
-      if (!startTimestamp) startTimestamp = timestamp
-      const progress = Math.min((timestamp - startTimestamp) / duration, 1)
-      const currentCount = progress * end
+      const progress = Math.min((timestamp - startTimeRef.current) / duration, 1)
+      const currentCount = start + progress * (end - start)
 
-      // Formatar o número com separador de milhar e decimais
+      countRef.current = currentCount
       setCount(currentCount)
 
       if (progress < 1) {
-        window.requestAnimationFrame(step)
-      } else {
-        setHasAnimated(true)
+        rafRef.current = requestAnimationFrame(animate)
       }
     }
 
-    window.requestAnimationFrame(step)
-  }, [isInView, end, duration, hasAnimated])
+    // Iniciar a animação
+    rafRef.current = requestAnimationFrame(animate)
 
-  // Formatar o número com separador de milhar e decimais
-  const formattedCount = new Intl.NumberFormat("pt-BR", {
-    minimumFractionDigits: decimals,
-    maximumFractionDigits: decimals,
-  }).format(count)
+    // Limpar a animação quando o componente for desmontado
+    return () => {
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current)
+      }
+    }
+  }, [start, end, duration])
+
+  // Formatar o número com decimais
+  const formattedCount = count.toFixed(decimals)
 
   return (
-    <div ref={ref} className={className}>
+    <span className={className}>
       {formattedCount}
       {suffix}
-    </div>
+    </span>
   )
 }

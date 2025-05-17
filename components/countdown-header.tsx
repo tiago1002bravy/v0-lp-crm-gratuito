@@ -29,55 +29,51 @@ export function CountdownHeader({ targetDate, onButtonClick }: CountdownHeaderPr
           seconds: Math.floor((difference / 1000) % 60),
         })
       } else {
-        // Se o tempo acabou, zera o contador
+        // Se o tempo acabou, zerar o contador
         setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 })
       }
     }
 
-    // Calcula o tempo restante imediatamente
+    // Calcular inicialmente
     calculateTimeLeft()
 
-    // Atualiza a cada segundo
+    // Atualizar a cada segundo
     const timer = setInterval(calculateTimeLeft, 1000)
 
-    // Limpa o intervalo quando o componente é desmontado
     return () => clearInterval(timer)
   }, [targetDate])
 
   return (
-    <div className="bg-[#9747FF] text-white py-4 md:py-5 w-full">
-      <div className="container mx-auto px-4">
-        <div className="flex flex-col sm:flex-row items-center justify-between">
-          <div className="flex items-center text-left mb-3 sm:mb-0">
-            <span className="font-medium mr-2 text-sm md:text-base">Oferta de lançamento encerra em:</span>
-            <div className="flex items-center font-bold text-base md:text-lg">
-              <div className="flex items-center">
-                <span>{String(timeLeft.days).padStart(2, "0")}</span>
-                <span className="mx-1 text-white/80">d</span>
-              </div>
-              <div className="flex items-center">
-                <span>{String(timeLeft.hours).padStart(2, "0")}</span>
-                <span className="mx-1 text-white/80">h</span>
-              </div>
-              <div className="flex items-center">
-                <span>{String(timeLeft.minutes).padStart(2, "0")}</span>
-                <span className="mx-1 text-white/80">m</span>
-              </div>
-              <div className="flex items-center">
-                <span>{String(timeLeft.seconds).padStart(2, "0")}</span>
-                <span className="ml-1 text-white/80">s</span>
-              </div>
+    <div className="bg-[#9747FF] text-white py-3 px-4 sticky top-0 z-50">
+      <div className="container mx-auto flex flex-col md:flex-row justify-between items-center gap-3">
+        <div className="flex items-center gap-2 text-sm md:text-base">
+          <span className="font-medium">Oferta especial por tempo limitado:</span>
+          <div className="flex items-center gap-1">
+            <div className="bg-white/20 rounded px-2 py-1 min-w-[28px] text-center">
+              {String(timeLeft.days).padStart(2, "0")}
+            </div>
+            <span>:</span>
+            <div className="bg-white/20 rounded px-2 py-1 min-w-[28px] text-center">
+              {String(timeLeft.hours).padStart(2, "0")}
+            </div>
+            <span>:</span>
+            <div className="bg-white/20 rounded px-2 py-1 min-w-[28px] text-center">
+              {String(timeLeft.minutes).padStart(2, "0")}
+            </div>
+            <span>:</span>
+            <div className="bg-white/20 rounded px-2 py-1 min-w-[28px] text-center">
+              {String(timeLeft.seconds).padStart(2, "0")}
             </div>
           </div>
-
-          <Button
-            onClick={onButtonClick}
-            className="bg-white text-[#9747FF] hover:bg-white/90 rounded-full py-2 px-5 h-auto text-sm md:text-base font-medium group"
-          >
-            Automatizar comercial
-            <ChevronRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" />
-          </Button>
         </div>
+
+        <Button
+          onClick={onButtonClick}
+          className="bg-white text-[#9747FF] hover:bg-gray-100 rounded-full text-sm px-4 py-1 h-auto"
+        >
+          Automatizar comercial
+          <ChevronRight className="ml-1 h-3 w-3" />
+        </Button>
       </div>
     </div>
   )

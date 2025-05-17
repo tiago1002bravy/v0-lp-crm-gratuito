@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState, useRef } from "react"
+import { useEffect, useState } from "react"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Check, ChevronRight, Star } from "lucide-react"
@@ -51,8 +51,7 @@ const testimonials = [
 const faqItems = [
   {
     question: "Preciso ter conhecimento técnico?",
-    answer:
-      "Não, a estrutura tem aulas explicativas de como usar.",
+    answer: "Não, a estrutura tem aulas explicativas de como usar.",
   },
   {
     question: "Quanto tempo leva para implementar?",
@@ -80,7 +79,6 @@ export default function Home() {
   const [isLoaded, setIsLoaded] = useState(false)
   const { isOpen, openPopup, closePopup, handleSubmit } = useConversionPopup()
   const currentYear = new Date().getFullYear()
-  const videoRef = useRef<HTMLVideoElement>(null)
 
   // Criar data alvo para o contador (3 dias a partir de agora)
   const targetDate = new Date()
@@ -88,13 +86,6 @@ export default function Home() {
 
   useEffect(() => {
     setIsLoaded(true)
-
-    // Garantir que o vídeo seja reproduzido quando estiver pronto
-    if (videoRef.current) {
-      videoRef.current.play().catch((error) => {
-        console.error("Erro ao reproduzir o vídeo:", error)
-      })
-    }
   }, [])
 
   const scrollToOffer = () => {
@@ -124,8 +115,8 @@ export default function Home() {
           </div>
 
           <div className="container mx-auto px-4 relative">
-            <div className="grid gap-6 lg:grid-cols-2 lg:gap-12 items-center">
-              <div className="flex flex-col gap-4">
+            <div className="max-w-3xl mx-auto">
+              <div className="flex flex-col gap-6">
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: isLoaded ? 1 : 0, y: isLoaded ? 0 : 20 }}
@@ -224,10 +215,10 @@ export default function Home() {
                 >
                   <div className="flex -space-x-2">
                     {[
-                      "/images/person1.jpeg",
-                      "/images/person2.jpeg",
-                      "/images/person3.jpeg",
-                      "/images/person4.jpeg",
+                      "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/IMG_6077.JPG-Jf2gEOPY7rV15nFAeqk73xbCzg9tSg.jpeg",
+                      "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/IMG_6079.JPG-rFrdIXc1iBYkBqsQXOmLqDiFEblpE1.jpeg",
+                      "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/IMG_6075.jpg-sgAPism9ZN0bpGBjF2Rkw83GMTFD7i.jpeg",
+                      "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/IMG_6076.jpg-b3VMx89Aj5AAX8QoXSWCqVrj6I26XB.jpeg",
                     ].map((src, index) => (
                       <div key={index} className="w-8 h-8 rounded-full border-2 border-white overflow-hidden relative">
                         <Image
@@ -248,96 +239,7 @@ export default function Home() {
                   </div>
                 </motion.div>
               </div>
-
-              <motion.div
-                initial={{ opacity: 0, x: 50 }}
-                animate={{ opacity: isLoaded ? 1 : 0, x: isLoaded ? 0 : 50 }}
-                transition={{ duration: 0.7, delay: 0.3 }}
-                className="flex justify-center lg:justify-end relative"
-              >
-                {/* Colorful glow effect */}
-                <div className="absolute -inset-4 rounded-2xl overflow-hidden">
-                  <div className="absolute -top-20 -left-20 w-64 h-64 rounded-full bg-purple-400/30 blur-3xl"></div>
-                  <div className="absolute -bottom-20 -right-20 w-64 h-64 rounded-full bg-yellow-400/30 blur-3xl"></div>
-                  <div className="absolute top-1/2 -translate-y-1/2 -left-20 w-64 h-64 rounded-full bg-pink-400/20 blur-3xl"></div>
-                  <div className="absolute top-1/2 -translate-y-1/2 -right-20 w-64 h-64 rounded-full bg-blue-400/20 blur-3xl"></div>
-                </div>
-
-                <div className="relative w-full max-w-[600px] aspect-[16/9] rounded-xl overflow-hidden z-10">
-                  {/* Vídeo em loop */}
-                  <video
-                    ref={videoRef}
-                    className="w-full h-full object-cover rounded-xl"
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                  >
-                    <source src="/videos/autocrm-demo.mov" type="video/mp4" />
-                    Seu navegador não suporta vídeos.
-                  </video>
-
-                  <div className="absolute bottom-4 right-4">
-                    <motion.div
-                      animate={{ rotate: [0, 10, -10, 0] }}
-                      transition={{
-                        duration: 2,
-                        repeat: Number.POSITIVE_INFINITY,
-                        repeatType: "reverse",
-                        ease: "easeInOut",
-                      }}
-                      className="h-8 w-8 rounded-full bg-white/30 backdrop-blur-sm flex items-center justify-center"
-                    >
-                      <span className="text-xs font-bold text-white">BS</span>
-                    </motion.div>
-                  </div>
-                </div>
-              </motion.div>
             </div>
-
-            {/* Floating elements */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: isLoaded ? 1 : 0, y: isLoaded ? 0 : 20 }}
-              transition={{ duration: 0.5, delay: 1.5 }}
-              className="absolute -bottom-16 left-1/4 transform -translate-x-1/2 hidden lg:block"
-            >
-              <div className="bg-white rounded-lg shadow-lg p-3 flex items-center gap-3 w-48">
-                <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-600">
-                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                </div>
-                <div>
-                  <div className="text-xs font-medium">Lead convertido</div>
-                  <div className="text-xs text-[#666]">Agora mesmo</div>
-                </div>
-              </div>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: isLoaded ? 1 : 0, y: isLoaded ? 0 : -20 }}
-              transition={{ duration: 0.5, delay: 1.6 }}
-              className="absolute top-10 right-10 transform translate-x-1/2 hidden lg:block"
-            >
-              <div className="bg-white rounded-lg shadow-lg p-3 flex items-center gap-3 w-40">
-                <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
-                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-                    />
-                  </svg>
-                </div>
-                <div>
-                  <div className="text-xs font-medium">Nova reunião</div>
-                  <div className="text-xs text-[#666]">Em 15 min</div>
-                </div>
-              </div>
-            </motion.div>
           </div>
         </section>
 
@@ -366,7 +268,7 @@ export default function Home() {
                 <div className="rounded-xl overflow-hidden relative shadow-lg">
                   <div className="relative w-full aspect-[16/10]">
                     <Image
-                      src="/images/template-gratuito-crm.svg"
+                      src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Print%20Pipeline.png-Y180KFZWhckc9hAuZWUSlullygG9rI.jpeg"
                       alt="Pipeline de Vendas"
                       fill
                       className="object-contain"
@@ -381,7 +283,7 @@ export default function Home() {
                 <div className="order-2 md:order-1 rounded-xl overflow-hidden relative shadow-lg">
                   <div className="relative w-full aspect-[16/10]">
                     <Image
-                      src="/images/automacoes-crm.png"
+                      src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Print%20Automac%CC%A7o%CC%83es-D6DTZrbDR06LGE51VnMmiGN2AGjIoB.png"
                       alt="Automações estratégicas"
                       fill
                       className="object-contain"
@@ -431,7 +333,7 @@ export default function Home() {
                 <div className="rounded-xl overflow-hidden relative shadow-lg">
                   <div className="relative w-full aspect-[16/10]">
                     <Image
-                      src="/images/dashboard-comercial.svg"
+                      src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Print%20Dash%20Comercial-HQihgowNWylG1mBXlf7Z3odu0ulsdb.svg"
                       alt="Dashboard de resultados"
                       fill
                       className="object-contain"
@@ -717,7 +619,7 @@ export default function Home() {
                 Usado pelos maiores especialistas
               </h2>
               <p className="text-xl text-[#666] max-w-[800px]">
-                Veja quem já está transfou seus processos
+                Veja quem já está utilizando o AutoCRM para transformar seu processo comercial
               </p>
             </div>
 
