@@ -51,7 +51,8 @@ const testimonials = [
 const faqItems = [
   {
     question: "Preciso ter conhecimento técnico?",
-    answer: "Não, a estrutura tem aulas explicativas de como usar.",
+    answer:
+      "Não, a estrutura tem aulas explicativas de como usar.",
   },
   {
     question: "Quanto tempo leva para implementar?",
@@ -90,31 +91,9 @@ export default function Home() {
 
     // Garantir que o vídeo seja reproduzido quando estiver pronto
     if (videoRef.current) {
-      // Função para tentar reproduzir o vídeo
-      const playVideo = () => {
-        if (videoRef.current) {
-          videoRef.current.play().catch((error) => {
-            console.error("Erro ao reproduzir o vídeo:", error)
-            // Em caso de erro, tentar novamente após interação do usuário
-            document.addEventListener(
-              "touchstart",
-              function playOnTouch() {
-                if (videoRef.current) videoRef.current.play()
-                document.removeEventListener("touchstart", playOnTouch)
-              },
-              { once: true },
-            )
-          })
-        }
-      }
-
-      // Tentar reproduzir o vídeo quando estiver carregado
-      videoRef.current.addEventListener("loadeddata", playVideo)
-
-      // Se já estiver carregado, tentar reproduzir
-      if (videoRef.current.readyState >= 2) {
-        playVideo()
-      }
+      videoRef.current.play().catch((error) => {
+        console.error("Erro ao reproduzir o vídeo:", error)
+      })
     }
   }, [])
 
@@ -293,11 +272,8 @@ export default function Home() {
                     loop
                     muted
                     playsInline
-                    preload="auto"
-                    poster="/placeholder-uo9fe.png"
                   >
                     <source src="/videos/autocrm-demo.mov" type="video/mp4" />
-                    <source src="/videos/autocrm-demo.webm" type="video/webm" />
                     Seu navegador não suporta vídeos.
                   </video>
 
@@ -741,7 +717,7 @@ export default function Home() {
                 Usado pelos maiores especialistas
               </h2>
               <p className="text-xl text-[#666] max-w-[800px]">
-                Veja quem já está utilizando o AutoCRM para transformar seu processo comercial
+                Veja quem já está transfou seus processos
               </p>
             </div>
 
