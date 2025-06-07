@@ -12,6 +12,7 @@ import { CountdownHeader } from "@/components/countdown-header"
 import { FloatingCTA } from "@/components/floating-cta"
 import { FAQSection } from "@/components/faq-section"
 import { AnimatedCounter } from "@/components/animated-counter"
+import { GTMEvents, gtmEvent } from "@/components/gtm-events"
 
 // Dados dos depoimentos (simplificados para apenas imagens)
 const testimonials = [
@@ -89,22 +90,70 @@ export default function Home() {
   }, [])
 
   const scrollToOffer = () => {
+    // Enviar evento para GTM
+    gtmEvent("scroll_to_offer", {
+      event_category: "engagement",
+      event_label: "scroll_to_offer_button",
+    })
+
     const ofertaSection = document.getElementById("oferta")
     if (ofertaSection) {
       ofertaSection.scrollIntoView({ behavior: "smooth" })
     }
   }
 
+  const handlePopupOpen = () => {
+    // Enviar evento para GTM
+    gtmEvent("popup_opened", {
+      event_category: "conversion",
+      event_label: "conversion_popup_opened",
+    })
+    openPopup()
+  }
+
+  const handleFormSubmit = (data: { name: string; email: string; phone: string }) => {
+    // Enviar evento para GTM
+    gtmEvent("form_submitted", {
+      event_category: "conversion",
+      event_label: "lead_form_submitted",
+      user_data: {
+        email: data.email,
+        phone: data.phone,
+      },
+    })
+    handleSubmit(data)
+  }
+
   return (
     <div className="flex flex-col min-h-screen bg-white">
+      {/* Componente para eventos GTM */}
+      <GTMEvents />
+
       {/* Barra de contador no topo */}
-      <CountdownHeader targetDate={targetDate} onButtonClick={scrollToOffer} />
+      <CountdownHeader
+        targetDate={targetDate}
+        onButtonClick={() => {
+          gtmEvent("header_cta_clicked", {
+            event_category: "engagement",
+            event_label: "header_automatizar_comercial",
+          })
+          scrollToOffer()
+        }}
+      />
 
       {/* Popup de conversão */}
-      <ConversionPopup isOpen={isOpen} onClose={closePopup} onSubmit={handleSubmit} />
+      <ConversionPopup isOpen={isOpen} onClose={closePopup} onSubmit={handleFormSubmit} />
 
       {/* Botão flutuante */}
-      <FloatingCTA onClick={scrollToOffer} />
+      <FloatingCTA
+        onClick={() => {
+          gtmEvent("floating_cta_clicked", {
+            event_category: "engagement",
+            event_label: "floating_button",
+          })
+          scrollToOffer()
+        }}
+      />
 
       <main className="flex-1">
         <section className="py-20 md:py-28 overflow-hidden relative">
@@ -166,7 +215,13 @@ export default function Home() {
                   <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                     <Button
                       className="bg-[#9747FF] hover:bg-[#8A3DF9] text-white rounded-full text-base font-medium px-6 py-3 h-auto group"
-                      onClick={scrollToOffer}
+                      onClick={() => {
+                        gtmEvent("hero_cta_clicked", {
+                          event_category: "conversion",
+                          event_label: "hero_automatizar_comercial",
+                        })
+                        scrollToOffer()
+                      }}
                     >
                       Automatizar comercial
                       <ChevronRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
@@ -570,7 +625,15 @@ export default function Home() {
                     <div className="flex flex-col gap-4 w-full max-w-md">
                       <Button
                         className="bg-[#9747FF] hover:bg-[#8A3DF9] text-white rounded-full py-6 text-lg font-medium h-auto"
-                        onClick={openPopup}
+                        onClick={() => {
+                          gtmEvent("purchase_intent", {
+                            event_category: "conversion",
+                            event_label: "pricing_section_cta",
+                            value: 47,
+                            currency: "BRL",
+                          })
+                          handlePopupOpen()
+                        }}
                       >
                         Quero automatizar meu comercial agora
                         <ChevronRight className="ml-2 h-5 w-5" />
@@ -684,7 +747,13 @@ export default function Home() {
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                 <Button
                   className="bg-[#9747FF] hover:bg-[#8A3DF9] text-white rounded-full py-6 px-8 text-lg font-medium h-auto"
-                  onClick={scrollToOffer}
+                  onClick={() => {
+                    gtmEvent("social_proof_cta_clicked", {
+                      event_category: "conversion",
+                      event_label: "social_proof_section_cta",
+                    })
+                    scrollToOffer()
+                  }}
                 >
                   Quero automatizar meu comercial agora
                   <ChevronRight className="ml-2 h-5 w-5" />
@@ -713,7 +782,13 @@ export default function Home() {
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                 <Button
                   className="bg-[#9747FF] hover:bg-[#8A3DF9] text-white rounded-full py-3 px-6 text-base font-medium h-auto"
-                  onClick={scrollToOffer}
+                  onClick={() => {
+                    gtmEvent("faq_cta_clicked", {
+                      event_category: "conversion",
+                      event_label: "faq_section_cta",
+                    })
+                    scrollToOffer()
+                  }}
                 >
                   Automatizar comercial agora
                   <ChevronRight className="ml-2 h-4 w-4" />
