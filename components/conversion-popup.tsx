@@ -23,6 +23,73 @@ export function ConversionPopup({ isOpen, onClose, onSubmit }: ConversionPopupPr
   const [isSuccess, setIsSuccess] = useState(false)
   const [formComplete, setFormComplete] = useState(false)
   const [focusedField, setFocusedField] = useState<string | null>(null)
+  const [utmParams, setUtmParams] = useState({
+    utm_source: "",
+    utm_medium: "",
+    utm_campaign: "",
+    utm_term: "",
+    utm_content: "",
+  })
+
+  // Função para capturar parâmetros UTM
+  const getUtmParams = () => {
+    if (typeof window === "undefined") {
+      return {
+        utm_source: "",
+        utm_medium: "",
+        utm_campaign: "",
+        utm_term: "",
+        utm_content: "",
+      }
+    }
+
+    const urlParams = new URLSearchParams(window.location.search)
+    return {
+      utm_source: urlParams.get("utm_source") || "",
+      utm_medium: urlParams.get("utm_medium") || "",
+      utm_campaign: urlParams.get("utm_campaign") || "",
+      utm_term: urlParams.get("utm_term") || "",
+      utm_content: urlParams.get("utm_content") || "",
+    }
+  }
+
+  // Função para construir a URL de redirecionamento com UTMs
+  const buildRedirectUrl = () => {
+    const baseUrl = "https://payfast.greenn.com.br/107757/offer/rt6nIP"
+
+    if (typeof window === "undefined") {
+      return baseUrl
+    }
+
+    const urlParams = new URLSearchParams(window.location.search)
+    const utmParams = new URLSearchParams()
+
+    // Capturar todos os parâmetros UTM
+    const utmKeys = ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content"]
+
+    utmKeys.forEach((key) => {
+      const value = urlParams.get(key)
+      if (value) {
+        utmParams.append(key, value)
+      }
+    })
+
+    const utmString = utmParams.toString()
+
+    if (utmString) {
+      return `${baseUrl}?${utmString}`
+    }
+
+    return baseUrl
+  }
+
+  // Capturar parâmetros UTM quando o componente é montado
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = getUtmParams()
+      setUtmParams(params)
+    }
+  }, [])
 
   // Reset form when modal opens
   useEffect(() => {
@@ -57,8 +124,37 @@ export function ConversionPopup({ isOpen, onClose, onSubmit }: ConversionPopupPr
   }, [name, email, phone])
 
   const validateEmail = (email: string) => {
+    // Regex para validação básica de formato de e-mail
     const basicFormat = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    return basicFormat.test(email)
+
+    // Verificações adicionais
+    if (!basicFormat.test(email)) {
+      return false
+    }
+
+    // Verificar se tem pelo menos um ponto no domínio
+    const parts = email.split("@")
+    if (parts.length !== 2) {
+      return false
+    }
+
+    // Verificar se o domínio tem pelo menos um ponto
+    const domain = parts[1]
+    if (!domain.includes(".")) {
+      return false
+    }
+
+    // Verificar se não termina com ponto
+    if (domain.endsWith(".")) {
+      return false
+    }
+
+    // Verificar comprimento mínimo do domínio (a.b)
+    if (domain.length < 3) {
+      return false
+    }
+
+    return true
   }
 
   const validateForm = () => {
@@ -82,6 +178,84 @@ export function ConversionPopup({ isOpen, onClose, onSubmit }: ConversionPopupPr
     return Object.keys(newErrors).length === 0
   }
 
+  // Formatar o número de telefone para o formato internacional
+  const formatPhoneForWebhook = (phoneNumber: string) => {
+    const numbers = phoneNumber.replace(/\D/g, "")
+    if (numbers.length >= 10) {
+      return `+55${numbers}`
+    }
+    return `+55${numbers}`
+  }
+
+  const sendWebhook = async () => {
+    try {
+      const cleanPhone = phone.replace(/\D/g, "")
+      const formattedPhone = formatPhoneForWebhook(phone)
+
+      const webhookData = [
+        {
+          headers: {
+            host: "n8n.bravy.com.br",
+            "content-type": "application/json",
+            "user-agent": "AutoCRM-Webhook",
+          },
+          params: {},
+          query: {},
+          body: {
+            id: Math.floor(Math.random() * 100000),
+            from: "crm-gratuito-v1",
+            created: new Date().toISOString(),
+            content: {
+              name: name,
+              email: email,
+              whatsapp: `55${phone}`,
+              utms: {
+                utm_source: utmParams.utm_source,
+                utm_medium: utmParams.utm_medium,
+                utm_campaign: utmParams.utm_campaign,
+                utm_term: utmParams.utm_term,
+                utm_content: utmParams.utm_content,
+              },
+              from: "crm-gratuito-v1",
+            },
+            name: name,
+            telefone: `55${phone}`,
+            email: email,
+            utm: {
+              id: Math.floor(Math.random() * 100000),
+              utmSource: utmParams.utm_source,
+              utmMedium: utmParams.utm_medium,
+              utmCampaign: utmParams.utm_campaign,
+              utmTerm: utmParams.utm_term,
+              utmContent: utmParams.utm_content,
+            },
+            whatsapp: formattedPhone,
+            formatted_phone: formattedPhone,
+          },
+          webhookUrl: "https://n8n.bravy.com.br/webhook/crm",
+          executionMode: "production",
+        },
+      ]
+
+      const response = await fetch("https://n8n.bravy.com.br/webhook/crm", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(webhookData),
+      })
+
+      if (!response.ok) {
+        console.error("Webhook error:", await response.text())
+      }
+
+      return response.ok
+    } catch (error) {
+      console.error("Error sending webhook:", error)
+      return false
+    }
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
@@ -90,15 +264,22 @@ export function ConversionPopup({ isOpen, onClose, onSubmit }: ConversionPopupPr
     setIsSubmitting(true)
 
     try {
-      // Chamar o callback onSubmit
+      // Enviar dados para o webhook
+      await sendWebhook()
+
+      // Chamar o callback onSubmit (que agora inclui o redirecionamento com UTMs)
       onSubmit({ name, email, phone })
 
       // Mostrar mensagem de sucesso
       setIsSuccess(true)
 
+      // Construir URL com UTMs para o redirecionamento
+      const redirectUrl = buildRedirectUrl()
+      console.log("Redirecionando para:", redirectUrl)
+
       // Mostrar mensagem de sucesso brevemente antes de redirecionar
       setTimeout(() => {
-        // O redirecionamento é feito no hook useConversionPopup
+        window.location.href = redirectUrl
       }, 1500)
     } catch (error) {
       console.error("Error submitting form:", error)

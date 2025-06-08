@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Check, ChevronRight, Star } from "lucide-react"
 import { motion } from "framer-motion"
@@ -13,37 +14,37 @@ import { FAQSection } from "@/components/faq-section"
 import { AnimatedCounter } from "@/components/animated-counter"
 import { GTMEvents, gtmEvent } from "@/components/gtm-events"
 
-// Dados dos depoimentos com placeholders funcionais
+// Dados dos depoimentos (simplificados para apenas imagens)
 const testimonials = [
   {
     id: 1,
     name: "Pablo Marçal",
-    image: "/placeholder.svg?height=400&width=400&text=Pablo+Marçal",
+    image: "/images/pablo-marcal.png",
   },
   {
     id: 2,
     name: "Cris Franklin",
-    image: "/placeholder.svg?height=400&width=400&text=Cris+Franklin",
+    image: "/images/cris-franklin.png",
   },
   {
     id: 3,
     name: "Rafa Brito",
-    image: "/placeholder.svg?height=400&width=400&text=Rafa+Brito",
+    image: "/images/rafa-brito.png",
   },
   {
     id: 4,
     name: "Marcello Safe",
-    image: "/placeholder.svg?height=400&width=400&text=Marcello+Safe",
+    image: "/images/marcello-safe.png",
   },
   {
     id: 5,
     name: "Igor Moraes",
-    image: "/placeholder.svg?height=400&width=400&text=Igor+Moraes",
+    image: "/images/igor-moraes.png",
   },
   {
     id: 6,
     name: "Cadu Neiva",
-    image: "/placeholder.svg?height=400&width=400&text=Cadu+Neiva",
+    image: "/images/cadu-neiva.png",
   },
 ]
 
@@ -268,14 +269,20 @@ export default function Home() {
                   className="flex gap-4 mt-8"
                 >
                   <div className="flex -space-x-2">
-                    {[1, 2, 3, 4].map((index) => (
-                      <div
-                        key={index}
-                        className="w-8 h-8 rounded-full border-2 border-white overflow-hidden relative bg-gradient-to-br from-blue-400 to-purple-500"
-                      >
-                        <div className="w-full h-full flex items-center justify-center text-white text-xs font-bold">
-                          {index}
-                        </div>
+                    {[
+                      "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/IMG_6077.JPG-Jf2gEOPY7rV15nFAeqk73xbCzg9tSg.jpeg",
+                      "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/IMG_6079.JPG-rFrdIXc1iBYkBqsQXOmLqDiFEblpE1.jpeg",
+                      "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/IMG_6075.jpg-sgAPism9ZN0bpGBjF2Rkw83GMTFD7i.jpeg",
+                      "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/IMG_6076.jpg-b3VMx89Aj5AAX8QoXSWCqVrj6I26XB.jpeg",
+                    ].map((src, index) => (
+                      <div key={index} className="w-8 h-8 rounded-full border-2 border-white overflow-hidden relative">
+                        <Image
+                          src={src || "/placeholder.svg"}
+                          alt={`Usuário ${index + 1}`}
+                          fill
+                          className="object-cover"
+                          sizes="32px"
+                        />
                       </div>
                     ))}
                   </div>
@@ -313,44 +320,29 @@ export default function Home() {
                     FollowUp, ganhos e perdas.
                   </p>
                 </div>
-                <div className="rounded-xl overflow-hidden relative shadow-lg bg-gradient-to-br from-blue-50 to-indigo-100">
-                  <div className="relative w-full aspect-[16/10] flex items-center justify-center">
-                    <div className="text-center p-8">
-                      <div className="w-16 h-16 bg-blue-500 rounded-full mx-auto mb-4 flex items-center justify-center">
-                        <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-                          />
-                        </svg>
-                      </div>
-                      <h4 className="text-lg font-semibold text-gray-700">Pipeline de Vendas</h4>
-                      <p className="text-sm text-gray-500 mt-2">Visualização completa do processo</p>
-                    </div>
+                <div className="rounded-xl overflow-hidden relative shadow-lg">
+                  <div className="relative w-full aspect-[16/10]">
+                    <Image
+                      src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Print%20Pipeline.png-Y180KFZWhckc9hAuZWUSlullygG9rI.jpeg"
+                      alt="Pipeline de Vendas"
+                      fill
+                      className="object-contain"
+                      priority
+                    />
                   </div>
                 </div>
               </div>
 
               {/* Automações estratégicas */}
               <div className="grid md:grid-cols-2 gap-10 items-center">
-                <div className="order-2 md:order-1 rounded-xl overflow-hidden relative shadow-lg bg-gradient-to-br from-green-50 to-emerald-100">
-                  <div className="relative w-full aspect-[16/10] flex items-center justify-center">
-                    <div className="text-center p-8">
-                      <div className="w-16 h-16 bg-green-500 rounded-full mx-auto mb-4 flex items-center justify-center">
-                        <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M13 10V3L4 14h7v7l9-11h-7z"
-                          />
-                        </svg>
-                      </div>
-                      <h4 className="text-lg font-semibold text-gray-700">Automações Estratégicas</h4>
-                      <p className="text-sm text-gray-500 mt-2">Processos automatizados</p>
-                    </div>
+                <div className="order-2 md:order-1 rounded-xl overflow-hidden relative shadow-lg">
+                  <div className="relative w-full aspect-[16/10]">
+                    <Image
+                      src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Print%20Automac%CC%A7o%CC%83es-D6DTZrbDR06LGE51VnMmiGN2AGjIoB.png"
+                      alt="Automações estratégicas"
+                      fill
+                      className="object-contain"
+                    />
                   </div>
                 </div>
                 <div className="order-1 md:order-2 flex flex-col gap-6">
@@ -393,22 +385,15 @@ export default function Home() {
                     conhecimento avançado em BI.
                   </p>
                 </div>
-                <div className="rounded-xl overflow-hidden relative shadow-lg bg-gradient-to-br from-purple-50 to-violet-100">
-                  <div className="relative w-full aspect-[16/10] flex items-center justify-center">
-                    <div className="text-center p-8">
-                      <div className="w-16 h-16 bg-purple-500 rounded-full mx-auto mb-4 flex items-center justify-center">
-                        <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-                          />
-                        </svg>
-                      </div>
-                      <h4 className="text-lg font-semibold text-gray-700">Dashboard de Resultados</h4>
-                      <p className="text-sm text-gray-500 mt-2">Métricas e indicadores</p>
-                    </div>
+                <div className="rounded-xl overflow-hidden relative shadow-lg">
+                  <div className="relative w-full aspect-[16/10]">
+                    <Image
+                      src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Print%20Dash%20Comercial-HQihgowNWylG1mBXlf7Z3odu0ulsdb.svg"
+                      alt="Dashboard de resultados"
+                      fill
+                      className="object-contain"
+                      priority
+                    />
                   </div>
                 </div>
               </div>
