@@ -270,10 +270,10 @@ export default function Home() {
                 >
                   <div className="flex -space-x-2">
                     {[
-                      "/placeholder.svg?height=32&width=32",
-                      "/placeholder.svg?height=32&width=32",
-                      "/placeholder.svg?height=32&width=32",
-                      "/placeholder.svg?height=32&width=32",
+                      "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/IMG_6077.JPG-Jf2gEOPY7rV15nFAeqk73xbCzg9tSg.jpeg",
+                      "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/IMG_6079.JPG-rFrdIXc1iBYkBqsQXOmLqDiFEblpE1.jpeg",
+                      "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/IMG_6075.jpg-sgAPism9ZN0bpGBjF2Rkw83GMTFD7i.jpeg",
+                      "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/IMG_6076.jpg-b3VMx89Aj5AAX8QoXSWCqVrj6I26XB.jpeg",
                     ].map((src, index) => (
                       <div key={index} className="w-8 h-8 rounded-full border-2 border-white overflow-hidden relative">
                         <Image
@@ -323,7 +323,7 @@ export default function Home() {
                 <div className="rounded-xl overflow-hidden relative shadow-lg">
                   <div className="relative w-full aspect-[16/10]">
                     <Image
-                      src="/placeholder.svg?height=400&width=640&text=Pipeline+de+Vendas"
+                      src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Print%20Pipeline.png-Y180KFZWhckc9hAuZWUSlullygG9rI.jpeg"
                       alt="Pipeline de Vendas"
                       fill
                       className="object-contain"
@@ -338,7 +338,7 @@ export default function Home() {
                 <div className="order-2 md:order-1 rounded-xl overflow-hidden relative shadow-lg">
                   <div className="relative w-full aspect-[16/10]">
                     <Image
-                      src="/placeholder.svg?height=400&width=640&text=Automações+Estratégicas"
+                      src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Print%20Automac%CC%A7o%CC%83es-D6DTZrbDR06LGE51VnMmiGN2AGjIoB.png"
                       alt="Automações estratégicas"
                       fill
                       className="object-contain"
@@ -388,7 +388,7 @@ export default function Home() {
                 <div className="rounded-xl overflow-hidden relative shadow-lg">
                   <div className="relative w-full aspect-[16/10]">
                     <Image
-                      src="/placeholder.svg?height=400&width=640&text=Dashboard+de+Resultados"
+                      src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Print%20Dash%20Comercial-HQihgowNWylG1mBXlf7Z3odu0ulsdb.svg"
                       alt="Dashboard de resultados"
                       fill
                       className="object-contain"
