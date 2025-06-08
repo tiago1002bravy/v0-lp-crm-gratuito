@@ -7,7 +7,6 @@ import { motion, AnimatePresence } from "framer-motion"
 import { X, CheckCircle, Clock, ShieldCheck, Users, ArrowRight, Check } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { getUtmParams } from "@/lib/utils"
 
 interface ConversionPopupProps {
   isOpen: boolean
@@ -31,6 +30,58 @@ export function ConversionPopup({ isOpen, onClose, onSubmit }: ConversionPopupPr
     utm_term: "",
     utm_content: "",
   })
+
+  // Função para capturar parâmetros UTM
+  const getUtmParams = () => {
+    if (typeof window === "undefined") {
+      return {
+        utm_source: "",
+        utm_medium: "",
+        utm_campaign: "",
+        utm_term: "",
+        utm_content: "",
+      }
+    }
+
+    const urlParams = new URLSearchParams(window.location.search)
+    return {
+      utm_source: urlParams.get("utm_source") || "",
+      utm_medium: urlParams.get("utm_medium") || "",
+      utm_campaign: urlParams.get("utm_campaign") || "",
+      utm_term: urlParams.get("utm_term") || "",
+      utm_content: urlParams.get("utm_content") || "",
+    }
+  }
+
+  // Função para construir a URL de redirecionamento com UTMs
+  const buildRedirectUrl = () => {
+    const baseUrl = "https://payfast.greenn.com.br/107757/offer/rt6nIP"
+
+    if (typeof window === "undefined") {
+      return baseUrl
+    }
+
+    const urlParams = new URLSearchParams(window.location.search)
+    const utmParams = new URLSearchParams()
+
+    // Capturar todos os parâmetros UTM
+    const utmKeys = ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content"]
+
+    utmKeys.forEach((key) => {
+      const value = urlParams.get(key)
+      if (value) {
+        utmParams.append(key, value)
+      }
+    })
+
+    const utmString = utmParams.toString()
+
+    if (utmString) {
+      return `${baseUrl}?${utmString}`
+    }
+
+    return baseUrl
+  }
 
   // Capturar parâmetros UTM quando o componente é montado
   useEffect(() => {
@@ -216,15 +267,19 @@ export function ConversionPopup({ isOpen, onClose, onSubmit }: ConversionPopupPr
       // Enviar dados para o webhook
       await sendWebhook()
 
-      // Chamar o callback onSubmit
+      // Chamar o callback onSubmit (que agora inclui o redirecionamento com UTMs)
       onSubmit({ name, email, phone })
 
       // Mostrar mensagem de sucesso
       setIsSuccess(true)
 
+      // Construir URL com UTMs para o redirecionamento
+      const redirectUrl = buildRedirectUrl()
+      console.log("Redirecionando para:", redirectUrl)
+
       // Mostrar mensagem de sucesso brevemente antes de redirecionar
       setTimeout(() => {
-        window.location.href = "https://payfast.greenn.com.br/107757/offer/rt6nIP"
+        window.location.href = redirectUrl
       }, 1500)
     } catch (error) {
       console.error("Error submitting form:", error)
