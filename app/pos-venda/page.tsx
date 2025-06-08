@@ -32,7 +32,14 @@ export default function PosVenda() {
           <Card className="mb-8 shadow-2xl border-0">
             <CardContent className="p-0">
               <div className="relative aspect-video bg-gray-900 rounded-lg overflow-hidden">
-                <video controls className="w-full h-full object-cover" poster="/placeholder.svg?height=400&width=700">
+                <video
+                  controls
+                  autoPlay
+                  muted
+                  playsInline
+                  className="w-full h-full object-cover"
+                  poster="/placeholder.svg?height=400&width=700"
+                >
                   <source src="/videos/V1-obrigado-crmautomatizado.mp4" type="video/mp4" />
                   Seu navegador não suporta o elemento de vídeo.
                 </video>
