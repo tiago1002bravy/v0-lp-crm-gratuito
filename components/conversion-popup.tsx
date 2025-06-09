@@ -203,7 +203,7 @@ export function ConversionPopup({ isOpen, onClose, onSubmit }: ConversionPopupPr
         }
       }
 
-      console.log("URL de redirecionamento final:", redirectUrl)
+      console.log("Redirecionando para:", redirectUrl)
 
       // Redirecionar após 1.5 segundos
       setTimeout(() => {
