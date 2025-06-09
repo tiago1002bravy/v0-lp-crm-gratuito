@@ -23,74 +23,6 @@ export function ConversionPopup({ isOpen, onClose, onSubmit }: ConversionPopupPr
   const [isSuccess, setIsSuccess] = useState(false)
   const [formComplete, setFormComplete] = useState(false)
   const [focusedField, setFocusedField] = useState<string | null>(null)
-  const [utmParams, setUtmParams] = useState({
-    utm_source: "",
-    utm_medium: "",
-    utm_campaign: "",
-    utm_term: "",
-    utm_content: "",
-  })
-
-  // Função para capturar parâmetros UTM
-  const getUtmParams = () => {
-    if (typeof window === "undefined") {
-      return {
-        utm_source: "",
-        utm_medium: "",
-        utm_campaign: "",
-        utm_term: "",
-        utm_content: "",
-      }
-    }
-
-    const urlParams = new URLSearchParams(window.location.search)
-    return {
-      utm_source: urlParams.get("utm_source") || "",
-      utm_medium: urlParams.get("utm_medium") || "",
-      utm_campaign: urlParams.get("utm_campaign") || "",
-      utm_term: urlParams.get("utm_term") || "",
-      utm_content: urlParams.get("utm_content") || "",
-    }
-  }
-
-  // Função para construir a URL de redirecionamento com UTMs
-  const buildRedirectUrl = () => {
-    const baseUrl =
-      "https://payfast.greenn.com.br/107757/offer/rt6nIP?b_id_1=121754&b_offer_1=f40cUJ&b_id_2=121753&b_offer_2=2sU4ir&b_id_3=121755&b_offer_3=0QZPk0"
-
-    if (typeof window === "undefined") {
-      return baseUrl
-    }
-
-    const urlParams = new URLSearchParams(window.location.search)
-    const utmKeys = ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content"]
-    const utmValues = {}
-
-    utmKeys.forEach((key) => {
-      const value = urlParams.get(key)
-      if (value) {
-        utmValues[key] = value
-      }
-    })
-
-    // Construir a URL com os parâmetros UTM
-    let finalUrl = baseUrl
-    const utmString = new URLSearchParams(utmValues).toString()
-
-    if (utmString) {
-      finalUrl += `&${utmString}`
-    }
-
-    return finalUrl
-  }
-
-  // Capturar parâmetros UTM quando o componente é montado
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const params = getUtmParams()
-      setUtmParams(params)
-    }
-  }, [])
 
   // Reset form when modal opens
   useEffect(() => {
@@ -125,35 +57,14 @@ export function ConversionPopup({ isOpen, onClose, onSubmit }: ConversionPopupPr
   }, [name, email, phone])
 
   const validateEmail = (email: string) => {
-    // Regex para validação básica de formato de e-mail
     const basicFormat = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!basicFormat.test(email)) return false
 
-    // Verificações adicionais
-    if (!basicFormat.test(email)) {
-      return false
-    }
-
-    // Verificar se tem pelo menos um ponto no domínio
     const parts = email.split("@")
-    if (parts.length !== 2) {
-      return false
-    }
+    if (parts.length !== 2) return false
 
-    // Verificar se o domínio tem pelo menos um ponto
     const domain = parts[1]
-    if (!domain.includes(".")) {
-      return false
-    }
-
-    // Verificar se não termina com ponto
-    if (domain.endsWith(".")) {
-      return false
-    }
-
-    // Verificar comprimento mínimo do domínio (a.b)
-    if (domain.length < 3) {
-      return false
-    }
+    if (!domain.includes(".") || domain.endsWith(".") || domain.length < 3) return false
 
     return true
   }
@@ -179,19 +90,20 @@ export function ConversionPopup({ isOpen, onClose, onSubmit }: ConversionPopupPr
     return Object.keys(newErrors).length === 0
   }
 
-  // Formatar o número de telefone para o formato internacional
-  const formatPhoneForWebhook = (phoneNumber: string) => {
-    const numbers = phoneNumber.replace(/\D/g, "")
-    if (numbers.length >= 10) {
-      return `+55${numbers}`
-    }
-    return `+55${numbers}`
-  }
-
   const sendWebhook = async () => {
     try {
+      // Capturar UTMs da URL atual
+      const urlParams = new URLSearchParams(window.location.search)
+      const utmParams = {
+        utm_source: urlParams.get("utm_source") || "",
+        utm_medium: urlParams.get("utm_medium") || "",
+        utm_campaign: urlParams.get("utm_campaign") || "",
+        utm_term: urlParams.get("utm_term") || "",
+        utm_content: urlParams.get("utm_content") || "",
+      }
+
       const cleanPhone = phone.replace(/\D/g, "")
-      const formattedPhone = formatPhoneForWebhook(phone)
+      const formattedPhone = `+55${cleanPhone}`
 
       const webhookData = [
         {
@@ -209,17 +121,12 @@ export function ConversionPopup({ isOpen, onClose, onSubmit }: ConversionPopupPr
             content: {
               name: name,
               email: email,
-              whatsapp: `55${phone}`,
-              utms: {
-                utm_source: utmParams.utm_source,
-                utm_medium: utmParams.utm_medium,
-                utm_campaign: utmParams.utm_campaign,
-                utm_term: utmParams.utm_content,
-              },
+              whatsapp: `55${cleanPhone}`,
+              utms: utmParams,
               from: "crm-gratuito-v1",
             },
             name: name,
-            telefone: `55${phone}`,
+            telefone: `55${cleanPhone}`,
             email: email,
             utm: {
               id: Math.floor(Math.random() * 100000),
@@ -273,33 +180,42 @@ export function ConversionPopup({ isOpen, onClose, onSubmit }: ConversionPopupPr
       // Mostrar mensagem de sucesso
       setIsSuccess(true)
 
-      // URL de redirecionamento fixa com todos os parâmetros
+      // URL base com todos os parâmetros de bump
       const baseUrl =
         "https://payfast.greenn.com.br/107757/offer/rt6nIP?b_id_1=121754&b_offer_1=f40cUJ&b_id_2=121753&b_offer_2=2sU4ir&b_id_3=121755&b_offer_3=0QZPk0"
 
-      // Adicionar UTMs se existirem
-      let redirectUrl = baseUrl
-      const urlParams = new URLSearchParams(window.location.search)
-      const utmKeys = ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content"]
-      const utmParams = new URLSearchParams()
+      // Capturar UTMs da URL atual
+      let finalUrl = baseUrl
 
-      utmKeys.forEach((key) => {
-        const value = urlParams.get(key)
-        if (value) {
-          utmParams.append(key, value)
+      if (typeof window !== "undefined") {
+        const currentUrl = new URL(window.location.href)
+        const utmParams = new URLSearchParams()
+
+        // Lista de parâmetros UTM para verificar
+        const utmKeys = ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content"]
+
+        // Adicionar UTMs se existirem
+        utmKeys.forEach((key) => {
+          const value = currentUrl.searchParams.get(key)
+          if (value) {
+            utmParams.append(key, value)
+          }
+        })
+
+        // Se há UTMs, adicionar à URL
+        if (utmParams.toString()) {
+          finalUrl = `${baseUrl}&${utmParams.toString()}`
         }
-      })
-
-      const utmString = utmParams.toString()
-      if (utmString) {
-        redirectUrl = `${baseUrl}&${utmString}`
       }
 
-      console.log("Redirecionando para:", redirectUrl)
+      console.log("URL de redirecionamento:", finalUrl)
+      console.log("URL atual:", window.location.href)
+      console.log("UTMs encontrados:", new URLSearchParams(window.location.search).toString())
 
-      // Mostrar mensagem de sucesso brevemente antes de redirecionar
+      // Redirecionar após 1.5 segundos
       setTimeout(() => {
-        window.location.href = redirectUrl
+        console.log("Executando redirecionamento para:", finalUrl)
+        window.location.href = finalUrl
       }, 1500)
     } catch (error) {
       console.error("Error submitting form:", error)
