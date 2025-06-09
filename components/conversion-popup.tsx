@@ -180,42 +180,44 @@ export function ConversionPopup({ isOpen, onClose, onSubmit }: ConversionPopupPr
       // Mostrar mensagem de sucesso
       setIsSuccess(true)
 
-      // URL base com todos os parâmetros de bump
-      const baseUrl =
+      // SOLUÇÃO FIXA: URL completa com todos os parâmetros
+      let redirectUrl =
         "https://payfast.greenn.com.br/107757/offer/rt6nIP?b_id_1=121754&b_offer_1=f40cUJ&b_id_2=121753&b_offer_2=2sU4ir&b_id_3=121755&b_offer_3=0QZPk0"
 
       // Capturar UTMs da URL atual
-      let finalUrl = baseUrl
-
       if (typeof window !== "undefined") {
-        const currentUrl = new URL(window.location.href)
-        const utmParams = new URLSearchParams()
-
-        // Lista de parâmetros UTM para verificar
+        const urlParams = new URLSearchParams(window.location.search)
         const utmKeys = ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content"]
 
-        // Adicionar UTMs se existirem
-        utmKeys.forEach((key) => {
-          const value = currentUrl.searchParams.get(key)
-          if (value) {
-            utmParams.append(key, value)
+        // Verificar se há UTMs
+        let hasUtms = false
+        for (const key of utmKeys) {
+          if (urlParams.has(key)) {
+            hasUtms = true
+            break
           }
-        })
+        }
 
-        // Se há UTMs, adicionar à URL
-        if (utmParams.toString()) {
-          finalUrl = `${baseUrl}&${utmParams.toString()}`
+        // Se houver UTMs, adicionar à URL de redirecionamento
+        if (hasUtms) {
+          redirectUrl += "&"
+          for (const key of utmKeys) {
+            const value = urlParams.get(key)
+            if (value) {
+              // Adicionar cada UTM individualmente
+              redirectUrl += `${key}=${encodeURIComponent(value)}&`
+            }
+          }
+          // Remover o último & se existir
+          redirectUrl = redirectUrl.endsWith("&") ? redirectUrl.slice(0, -1) : redirectUrl
         }
       }
 
-      console.log("URL de redirecionamento:", finalUrl)
-      console.log("URL atual:", window.location.href)
-      console.log("UTMs encontrados:", new URLSearchParams(window.location.search).toString())
+      console.log("URL de redirecionamento final:", redirectUrl)
 
       // Redirecionar após 1.5 segundos
       setTimeout(() => {
-        console.log("Executando redirecionamento para:", finalUrl)
-        window.location.href = finalUrl
+        window.location.href = redirectUrl
       }, 1500)
     } catch (error) {
       console.error("Error submitting form:", error)
