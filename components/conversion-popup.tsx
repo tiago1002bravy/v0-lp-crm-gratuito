@@ -63,25 +63,25 @@ export function ConversionPopup({ isOpen, onClose, onSubmit }: ConversionPopupPr
     }
 
     const urlParams = new URLSearchParams(window.location.search)
-    const utmParams = new URLSearchParams()
-
-    // Capturar todos os parâmetros UTM
     const utmKeys = ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content"]
+    const utmValues = {}
 
     utmKeys.forEach((key) => {
       const value = urlParams.get(key)
       if (value) {
-        utmParams.append(key, value)
+        utmValues[key] = value
       }
     })
 
-    const utmString = utmParams.toString()
+    // Construir a URL com os parâmetros UTM
+    let finalUrl = baseUrl
+    const utmString = new URLSearchParams(utmValues).toString()
 
     if (utmString) {
-      return `${baseUrl}&${utmString}`
+      finalUrl += `&${utmString}`
     }
 
-    return baseUrl
+    return finalUrl
   }
 
   // Capturar parâmetros UTM quando o componente é montado
@@ -267,14 +267,34 @@ export function ConversionPopup({ isOpen, onClose, onSubmit }: ConversionPopupPr
       // Enviar dados para o webhook
       await sendWebhook()
 
-      // Chamar o callback onSubmit (que agora inclui o redirecionamento com UTMs)
+      // Chamar o callback onSubmit
       onSubmit({ name, email, phone })
 
       // Mostrar mensagem de sucesso
       setIsSuccess(true)
 
-      // Construir URL com UTMs para o redirecionamento
-      const redirectUrl = buildRedirectUrl()
+      // URL de redirecionamento fixa com todos os parâmetros
+      const baseUrl =
+        "https://payfast.greenn.com.br/107757/offer/rt6nIP?b_id_1=121754&b_offer_1=f40cUJ&b_id_2=121753&b_offer_2=2sU4ir&b_id_3=121755&b_offer_3=0QZPk0"
+
+      // Adicionar UTMs se existirem
+      let redirectUrl = baseUrl
+      const urlParams = new URLSearchParams(window.location.search)
+      const utmKeys = ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content"]
+      const utmParams = new URLSearchParams()
+
+      utmKeys.forEach((key) => {
+        const value = urlParams.get(key)
+        if (value) {
+          utmParams.append(key, value)
+        }
+      })
+
+      const utmString = utmParams.toString()
+      if (utmString) {
+        redirectUrl = `${baseUrl}&${utmString}`
+      }
+
       console.log("Redirecionando para:", redirectUrl)
 
       // Mostrar mensagem de sucesso brevemente antes de redirecionar
