@@ -55,7 +55,8 @@ export function ConversionPopup({ isOpen, onClose, onSubmit }: ConversionPopupPr
 
   // Função para construir a URL de redirecionamento com UTMs
   const buildRedirectUrl = () => {
-    const baseUrl = "https://payfast.greenn.com.br/107757/offer/rt6nIP?b_id_1=121754&b_offer_1=f40cUJ&b_id_2=121753&b_offer_2=2sU4ir&b_id_3=121755&b_offer_3=0QZPk0"
+    const baseUrl =
+      "https://payfast.greenn.com.br/107757/offer/rt6nIP?b_id_1=121754&b_offer_1=f40cUJ&b_id_2=121753&b_offer_2=2sU4ir&b_id_3=121755&b_offer_3=0QZPk0"
 
     if (typeof window === "undefined") {
       return baseUrl
@@ -77,7 +78,7 @@ export function ConversionPopup({ isOpen, onClose, onSubmit }: ConversionPopupPr
     const utmString = utmParams.toString()
 
     if (utmString) {
-      return `${baseUrl}?${utmString}`
+      return `${baseUrl}&${utmString}`
     }
 
     return baseUrl
@@ -213,8 +214,7 @@ export function ConversionPopup({ isOpen, onClose, onSubmit }: ConversionPopupPr
                 utm_source: utmParams.utm_source,
                 utm_medium: utmParams.utm_medium,
                 utm_campaign: utmParams.utm_campaign,
-                utm_term: utmParams.utm_term,
-                utm_content: utmParams.utm_content,
+                utm_term: utmParams.utm_content,
               },
               from: "crm-gratuito-v1",
             },
