@@ -180,36 +180,26 @@ export function ConversionPopup({ isOpen, onClose, onSubmit }: ConversionPopupPr
       // Mostrar mensagem de sucesso
       setIsSuccess(true)
 
-      // SOLUÇÃO FIXA: URL completa com todos os parâmetros
-      let redirectUrl =
-        "https://payfast.greenn.com.br/107757/offer/rt6nIP?b_id_1=121754&b_offer_1=f40cUJ&b_id_2=121753&b_offer_2=2sU4ir&b_id_3=121755&b_offer_3=0QZPk0"
+      // NOVO LINK: URL simples e limpa
+      let redirectUrl = "https://link.gestaointeligente.club/crm"
 
-      // Capturar UTMs da URL atual
+      // Capturar UTMs da URL atual e adicionar se existirem
       if (typeof window !== "undefined") {
         const urlParams = new URLSearchParams(window.location.search)
         const utmKeys = ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content"]
 
         // Verificar se há UTMs
-        let hasUtms = false
+        const utmPairs = []
         for (const key of utmKeys) {
-          if (urlParams.has(key)) {
-            hasUtms = true
-            break
+          const value = urlParams.get(key)
+          if (value) {
+            utmPairs.push(`${key}=${encodeURIComponent(value)}`)
           }
         }
 
-        // Se houver UTMs, adicionar à URL de redirecionamento
-        if (hasUtms) {
-          redirectUrl += "&"
-          for (const key of utmKeys) {
-            const value = urlParams.get(key)
-            if (value) {
-              // Adicionar cada UTM individualmente
-              redirectUrl += `${key}=${encodeURIComponent(value)}&`
-            }
-          }
-          // Remover o último & se existir
-          redirectUrl = redirectUrl.endsWith("&") ? redirectUrl.slice(0, -1) : redirectUrl
+        // Se houver UTMs, adicionar à URL
+        if (utmPairs.length > 0) {
+          redirectUrl += "?" + utmPairs.join("&")
         }
       }
 
