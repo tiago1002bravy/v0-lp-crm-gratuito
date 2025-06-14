@@ -125,35 +125,14 @@ export function ConversionPopup({ isOpen, onClose, onSubmit, checkoutUrl }: Conv
   }, [name, email, phone])
 
   const validateEmail = (email: string) => {
-    // Regex para validação básica de formato de e-mail
     const basicFormat = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!basicFormat.test(email)) return false
 
-    // Verificações adicionais
-    if (!basicFormat.test(email)) {
-      return false
-    }
-
-    // Verificar se tem pelo menos um ponto no domínio
     const parts = email.split("@")
-    if (parts.length !== 2) {
-      return false
-    }
+    if (parts.length !== 2) return false
 
-    // Verificar se o domínio tem pelo menos um ponto
     const domain = parts[1]
-    if (!domain.includes(".")) {
-      return false
-    }
-
-    // Verificar se não termina com ponto
-    if (domain.endsWith(".")) {
-      return false
-    }
-
-    // Verificar comprimento mínimo do domínio (a.b)
-    if (domain.length < 3) {
-      return false
-    }
+    if (!domain.includes(".") || domain.endsWith(".") || domain.length < 3) return false
 
     return true
   }
@@ -179,19 +158,20 @@ export function ConversionPopup({ isOpen, onClose, onSubmit, checkoutUrl }: Conv
     return Object.keys(newErrors).length === 0
   }
 
-  // Formatar o número de telefone para o formato internacional
-  const formatPhoneForWebhook = (phoneNumber: string) => {
-    const numbers = phoneNumber.replace(/\D/g, "")
-    if (numbers.length >= 10) {
-      return `+55${numbers}`
-    }
-    return `+55${numbers}`
-  }
-
   const sendWebhook = async () => {
     try {
+      // Capturar UTMs da URL atual
+      const urlParams = new URLSearchParams(window.location.search)
+      const utmParams = {
+        utm_source: urlParams.get("utm_source") || "",
+        utm_medium: urlParams.get("utm_medium") || "",
+        utm_campaign: urlParams.get("utm_campaign") || "",
+        utm_term: urlParams.get("utm_term") || "",
+        utm_content: urlParams.get("utm_content") || "",
+      }
+
       const cleanPhone = phone.replace(/\D/g, "")
-      const formattedPhone = formatPhoneForWebhook(phone)
+      const formattedPhone = `+55${cleanPhone}`
 
       const webhookData = [
         {
@@ -209,18 +189,12 @@ export function ConversionPopup({ isOpen, onClose, onSubmit, checkoutUrl }: Conv
             content: {
               name: name,
               email: email,
-              whatsapp: `55${phone}`,
-              utms: {
-                utm_source: utmParams.utm_source,
-                utm_medium: utmParams.utm_medium,
-                utm_campaign: utmParams.utm_campaign,
-                utm_term: utmParams.utm_term,
-                utm_content: utmParams.utm_content,
-              },
+              whatsapp: `55${cleanPhone}`,
+              utms: utmParams,
               from: "crm-gratuito-v1",
             },
             name: name,
-            telefone: `55${phone}`,
+            telefone: `55${cleanPhone}`,
             email: email,
             utm: {
               id: Math.floor(Math.random() * 100000),
@@ -268,17 +242,38 @@ export function ConversionPopup({ isOpen, onClose, onSubmit, checkoutUrl }: Conv
       // Enviar dados para o webhook
       await sendWebhook()
 
-      // Chamar o callback onSubmit (que agora inclui o redirecionamento com UTMs)
+      // Chamar o callback onSubmit
       onSubmit({ name, email, phone })
 
       // Mostrar mensagem de sucesso
       setIsSuccess(true)
 
-      // Construir URL com UTMs para o redirecionamento
-      const redirectUrl = buildRedirectUrl()
+      // NOVO LINK: URL simples e limpa
+      let redirectUrl = "https://link.gestaointeligente.club/crm"
+
+      // Capturar UTMs da URL atual e adicionar se existirem
+      if (typeof window !== "undefined") {
+        const urlParams = new URLSearchParams(window.location.search)
+        const utmKeys = ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content"]
+
+        // Verificar se há UTMs
+        const utmPairs = []
+        for (const key of utmKeys) {
+          const value = urlParams.get(key)
+          if (value) {
+            utmPairs.push(`${key}=${encodeURIComponent(value)}`)
+          }
+        }
+
+        // Se houver UTMs, adicionar à URL
+        if (utmPairs.length > 0) {
+          redirectUrl += "?" + utmPairs.join("&")
+        }
+      }
+
       console.log("Redirecionando para:", redirectUrl)
 
-      // Mostrar mensagem de sucesso brevemente antes de redirecionar
+      // Redirecionar após 1.5 segundos
       setTimeout(() => {
         window.location.href = redirectUrl
       }, 1500)
