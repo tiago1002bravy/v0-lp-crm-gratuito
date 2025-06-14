@@ -9,12 +9,13 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 
 interface ConversionPopupProps {
+  checkoutUrl?: string
   isOpen: boolean
   onClose: () => void
   onSubmit: (data: { name: string; email: string; phone: string }) => void
 }
 
-export function ConversionPopup({ isOpen, onClose, onSubmit }: ConversionPopupProps) {
+export function ConversionPopup({ isOpen, onClose, onSubmit, checkoutUrl }: ConversionPopupProps) {
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [phone, setPhone] = useState("")
@@ -55,7 +56,7 @@ export function ConversionPopup({ isOpen, onClose, onSubmit }: ConversionPopupPr
 
   // Função para construir a URL de redirecionamento com UTMs
   const buildRedirectUrl = () => {
-    const baseUrl = "https://payfast.greenn.com.br/107757/offer/rt6nIP"
+    const baseUrl = checkoutUrl || "https://payfast.greenn.com.br/107757/offer/rt6nIP"
 
     if (typeof window === "undefined") {
       return baseUrl
