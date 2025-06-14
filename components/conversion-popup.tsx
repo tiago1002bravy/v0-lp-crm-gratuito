@@ -56,7 +56,7 @@ export function ConversionPopup({ isOpen, onClose, onSubmit, checkoutUrl }: Conv
 
   // Função para construir a URL de redirecionamento com UTMs
   const buildRedirectUrl = () => {
-    const baseUrl = checkoutUrl || "https://payfast.greenn.com.br/107757/offer/rt6nIP"
+    const baseUrl = checkoutUrl || "https://link.gestaointeligente.club/crm"
 
     if (typeof window === "undefined") {
       return baseUrl
@@ -249,7 +249,7 @@ export function ConversionPopup({ isOpen, onClose, onSubmit, checkoutUrl }: Conv
       setIsSuccess(true)
 
       // NOVO LINK: URL simples e limpa
-      let redirectUrl = "https://link.gestaointeligente.club/crm"
+      let redirectUrl = buildRedirectUrl()
 
       // Capturar UTMs da URL atual e adicionar se existirem
       if (typeof window !== "undefined") {
