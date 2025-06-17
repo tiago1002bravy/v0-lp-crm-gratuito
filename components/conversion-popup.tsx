@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import { X, CheckCircle, Clock, ShieldCheck, Users, ArrowRight, Check } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { SendDataToLeadsApi, sendWebhookToLeadsApi } from "@/lib/fetch"
 
 interface ConversionPopupProps {
   checkoutUrl?: string
@@ -272,6 +273,17 @@ export function ConversionPopup({ isOpen, onClose, onSubmit, checkoutUrl }: Conv
       }
 
       console.log("Redirecionando para:", redirectUrl)
+
+      const origin = 'crm-automatizado-86a8ny2r0';
+      const data: SendDataToLeadsApi = {
+        name, email, phone
+      }
+
+      sendWebhookToLeadsApi(origin, data).then(()=>{
+        console.log('Dados enviados para api. Origem:', origin)
+      }).then(()=>{
+        console.error('Erro ao enviar dedos para api. Origem:', origin)
+      })
 
       // Redirecionar após 1.5 segundos
       setTimeout(() => {
