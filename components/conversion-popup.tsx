@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import { X, CheckCircle, Clock, ShieldCheck, Users, ArrowRight, Check } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { SendDataToLeadsApi, sendWebhookToLeadsApi } from "@/lib/fetch"
+import { type SendDataToLeadsApi, sendWebhookToLeadsApi } from "@/lib/fetch"
 
 interface ConversionPopupProps {
   checkoutUrl?: string
@@ -25,13 +25,15 @@ export function ConversionPopup({ isOpen, onClose, onSubmit, checkoutUrl }: Conv
   const [isSuccess, setIsSuccess] = useState(false)
   const [formComplete, setFormComplete] = useState(false)
   const [focusedField, setFocusedField] = useState<string | null>(null)
-  const [utmParams, setUtmParams] = useState({
-    utm_source: "",
-    utm_medium: "",
-    utm_campaign: "",
-    utm_term: "",
-    utm_content: "",
-  })
+  // utmParams state is not directly used in the new webhook payload structure,
+  // but getUtmParams is called within sendWebhook.
+  // const [utmParams, setUtmParams] = useState({
+  //   utm_source: "",
+  //   utm_medium: "",
+  //   utm_campaign: "",
+  //   utm_term: "",
+  //   utm_content: "",
+  // })
 
   // Função para capturar parâmetros UTM
   const getUtmParams = () => {
@@ -63,35 +65,34 @@ export function ConversionPopup({ isOpen, onClose, onSubmit, checkoutUrl }: Conv
       return baseUrl
     }
 
-    const urlParams = new URLSearchParams(window.location.search)
-    const utmParams = new URLSearchParams()
+    const currentUrlParams = new URLSearchParams(window.location.search)
+    const utmQueryString = new URLSearchParams()
 
-    // Capturar todos os parâmetros UTM
     const utmKeys = ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content"]
 
     utmKeys.forEach((key) => {
-      const value = urlParams.get(key)
+      const value = currentUrlParams.get(key)
       if (value) {
-        utmParams.append(key, value)
+        utmQueryString.append(key, value)
       }
     })
 
-    const utmString = utmParams.toString()
+    const utmString = utmQueryString.toString()
 
     if (utmString) {
-      return `${baseUrl}?${utmString}`
+      return `${baseUrl}${baseUrl.includes("?") ? "&" : "?"}${utmString}`
     }
 
     return baseUrl
   }
 
   // Capturar parâmetros UTM quando o componente é montado
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const params = getUtmParams()
-      setUtmParams(params)
-    }
-  }, [])
+  // useEffect(() => {
+  //   if (typeof window !== "undefined") {
+  //     const params = getUtmParams()
+  //     setUtmParams(params)
+  //   }
+  // }, [])
 
   // Reset form when modal opens
   useEffect(() => {
@@ -161,53 +162,72 @@ export function ConversionPopup({ isOpen, onClose, onSubmit, checkoutUrl }: Conv
 
   const sendWebhook = async () => {
     try {
-      // Capturar UTMs da URL atual
-      const urlParams = new URLSearchParams(window.location.search)
-      const utmParams = {
-        utm_source: urlParams.get("utm_source") || "",
-        utm_medium: urlParams.get("utm_medium") || "",
-        utm_campaign: urlParams.get("utm_campaign") || "",
-        utm_term: urlParams.get("utm_term") || "",
-        utm_content: urlParams.get("utm_content") || "",
+      const capturedUtmParams = getUtmParams()
+      const cleanPhone = phone.replace(/\D/g, "")
+      const formattedPhone = `+55${cleanPhone}` // Assuming Brazilian numbers
+
+      const selectedPlanData = {
+        id: 1, // Or a more specific ID if available
+        name: "crm-automatizado",
+        price: 47,
       }
 
-      const cleanPhone = phone.replace(/\D/g, "")
-      const formattedPhone = `+55${cleanPhone}`
+      const innerBody = {
+        id: Math.floor(Math.random() * 100000),
+        from: "crm-gratuito-v1",
+        created: new Date().toISOString(),
+        content: {
+          name: name,
+          email: email,
+          whatsapp: `55${cleanPhone}`, // Consistent with formattedPhone without '+'
+          utms: capturedUtmParams,
+          from: "crm-gratuito-v1",
+          selectedPlan: selectedPlanData,
+        },
+        name: name,
+        telefone: `55${cleanPhone}`, // Consistent with formattedPhone without '+'
+        email: email,
+        utm: {
+          id: Math.floor(Math.random() * 100000),
+          utmSource: capturedUtmParams.utm_source,
+          utmMedium: capturedUtmParams.utm_medium,
+          utmCampaign: capturedUtmParams.utm_campaign,
+          utmTerm: capturedUtmParams.utm_term,
+          utmContent: capturedUtmParams.utm_content,
+        },
+        whatsapp: formattedPhone,
+        formatted_phone: formattedPhone,
+        selectedPlan: selectedPlanData,
+      }
 
-      const webhookData = [
+      const webhookPayload = [
         {
           headers: {
+            // Outer headers
             host: "n8n.bravy.com.br",
             "content-type": "application/json",
-            "user-agent": "AutoCRM-Webhook",
+            "user-agent":
+              "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36", // Example User Agent
+            // Add other relevant headers from your example if needed
           },
           params: {},
           query: {},
-          body: {
-            id: Math.floor(Math.random() * 100000),
-            from: "crm-gratuito-v1",
-            created: new Date().toISOString(),
-            content: {
-              name: name,
-              email: email,
-              whatsapp: `55${cleanPhone}`,
-              utms: utmParams,
-              from: "crm-gratuito-v1",
+          body: [
+            // Outer body is an array
+            {
+              headers: {
+                // Inner headers
+                host: "n8n.bravy.com.br",
+                "content-type": "application/json",
+                "user-agent": "AutoCRM-Webhook",
+              },
+              params: {},
+              query: {},
+              body: innerBody, // The actual lead data
+              webhookUrl: "https://n8n.bravy.com.br/webhook/crm",
+              executionMode: "production",
             },
-            name: name,
-            telefone: `55${cleanPhone}`,
-            email: email,
-            utm: {
-              id: Math.floor(Math.random() * 100000),
-              utmSource: utmParams.utm_source,
-              utmMedium: utmParams.utm_medium,
-              utmCampaign: utmParams.utm_campaign,
-              utmTerm: utmParams.utm_term,
-              utmContent: utmParams.utm_content,
-            },
-            whatsapp: formattedPhone,
-            formatted_phone: formattedPhone,
-          },
+          ],
           webhookUrl: "https://n8n.bravy.com.br/webhook/crm",
           executionMode: "production",
         },
@@ -218,11 +238,13 @@ export function ConversionPopup({ isOpen, onClose, onSubmit, checkoutUrl }: Conv
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(webhookData),
+        body: JSON.stringify(webhookPayload),
       })
 
       if (!response.ok) {
-        console.error("Webhook error:", await response.text())
+        console.error("Webhook error:", response.status, await response.text())
+      } else {
+        console.log("Webhook sent successfully:", await response.json())
       }
 
       return response.ok
@@ -240,57 +262,34 @@ export function ConversionPopup({ isOpen, onClose, onSubmit, checkoutUrl }: Conv
     setIsSubmitting(true)
 
     try {
-      // Enviar dados para o webhook
       await sendWebhook()
-
-      // Chamar o callback onSubmit
       onSubmit({ name, email, phone })
-
-      // Mostrar mensagem de sucesso
       setIsSuccess(true)
 
-      // NOVO LINK: URL simples e limpa
-      let redirectUrl = buildRedirectUrl()
-
-      // Capturar UTMs da URL atual e adicionar se existirem
-      if (typeof window !== "undefined") {
-        const urlParams = new URLSearchParams(window.location.search)
-        const utmKeys = ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content"]
-
-        // Verificar se há UTMs
-        const utmPairs = []
-        for (const key of utmKeys) {
-          const value = urlParams.get(key)
-          if (value) {
-            utmPairs.push(`${key}=${encodeURIComponent(value)}`)
-          }
-        }
-
-        // Se houver UTMs, adicionar à URL
-        if (utmPairs.length > 0) {
-          redirectUrl += "?" + utmPairs.join("&")
-        }
-      }
-
+      const redirectUrl = buildRedirectUrl()
       console.log("Redirecionando para:", redirectUrl)
 
-      const origin = 'crm-automatizado-86a8ny2r0';
-      const data: SendDataToLeadsApi = {
-        name, email, phone
-      }
+      const origin = "crm-automatizado-86a8ny2r0" // This seems to be a project identifier
+      const dataToLeadsApi: SendDataToLeadsApi = { name, email, phone }
 
-      sendWebhookToLeadsApi(origin, data).then(()=>{
-        console.log('Dados enviados para api. Origem:', origin)
-      }).then(()=>{
-        console.error('Erro ao enviar dedos para api. Origem:', origin)
-      })
+      // Sending to a secondary API, ensure this is intended.
+      sendWebhookToLeadsApi(origin, dataToLeadsApi)
+        .then(() => {
+          console.log("Dados enviados para leads API. Origem:", origin)
+        })
+        .catch((error) => {
+          // Catching potential errors from sendWebhookToLeadsApi
+          console.error("Erro ao enviar dados para leads API. Origem:", origin, error)
+        })
 
-      // Redirecionar após 1.5 segundos
       setTimeout(() => {
-        window.location.href = redirectUrl
+        if (typeof window !== "undefined") {
+          window.location.href = redirectUrl
+        }
       }, 1500)
     } catch (error) {
       console.error("Error submitting form:", error)
+      // Potentially set an error state here to inform the user
     } finally {
       setIsSubmitting(false)
     }
@@ -300,12 +299,13 @@ export function ConversionPopup({ isOpen, onClose, onSubmit, checkoutUrl }: Conv
     const numbers = value.replace(/\D/g, "")
 
     if (numbers.length <= 2) {
-      return numbers
+      return `(${numbers}`
     } else if (numbers.length <= 6) {
       return `(${numbers.slice(0, 2)}) ${numbers.slice(2)}`
     } else if (numbers.length <= 10) {
       return `(${numbers.slice(0, 2)}) ${numbers.slice(2, 6)}-${numbers.slice(6)}`
     } else {
+      // For 11 digits (e.g., mobile numbers with 9)
       return `(${numbers.slice(0, 2)}) ${numbers.slice(2, 7)}-${numbers.slice(7, 11)}`
     }
   }
